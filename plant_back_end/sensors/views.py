@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt #fix this to make more secure... 
 from .forms import Sensor_form
 from django.utils import timezone 
+from django.views.decorators.csrf import csrf_exempt #fix this to make more secure... 
 
 # Create your views here.
 

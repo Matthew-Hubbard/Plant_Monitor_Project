@@ -5,14 +5,6 @@ from datetime import datetime
 
 class Sensor_data(models.Model):
 
-#    class Meta:
-#        verbose_name = _("")
-#
-#        return self.name
-#
-#    def get_absolute_url(self):
-#        return reverse("_detail", kwargs={"pk": self.pk})
-    
     def __str__(self):
         return ("\
             \nid:\t\t{0:d}\

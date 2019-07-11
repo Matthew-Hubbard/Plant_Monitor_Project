@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #apps
     'sensors.apps.SensorsConfig',
-    #rest_framework
-    'rest_framework',
 ]
 
 MIDDLEWARE = [
