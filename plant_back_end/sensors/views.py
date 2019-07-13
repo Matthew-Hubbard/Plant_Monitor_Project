@@ -24,5 +24,8 @@ def send_data(request):
             post.save()
             #return HttpResponse("Hello, world. You've made a POST request at /sensors/send_data.")
             return HttpResponse("OK")
+        else:
+            print("form isn't valid.")
+            print(request.body)
 
     return HttpResponse("Hello, world. You're at send data.")
