@@ -4,8 +4,8 @@ I'm developing a system of Arduinos with sensors to monitor plants connected ove
 
 **End goal:** To host a website that will track your plants data and tell you when they need to be watered.
 
-### Wiring Diagrams
-## Sensor Module
+## Wiring Diagrams
+### Sensor Module
 ![Fritzing Breadboard Wiring Diagram](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/schematics/Plant_Monitoring_Project_v1.0_bb.png)
 <sup>\*Fritzing files available in the 'schematics' directory.</sup>
 #### Components
