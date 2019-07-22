@@ -1,6 +1,7 @@
 # Wireless Plant Monitoring
 ### About
 **End goal:** To host a website that will track plant data through wireless sensors and tell you when they need watering.
+
 I'm developing a system of Arduinos with sensors to monitor plants connected over RF that upload data to a full stack website.
 
 ## Wiring Diagrams
