@@ -2,7 +2,7 @@
 ### About
 I'm developing a system of Arduinos with sensors to monitor plants connected over RF that upload data to a full stack website.
 
-**End goal:** To host a website that will track your plants data and tell you when they need to be watered.
+**End goal:** To host a website that will track plant data through wireless sensors and tell you when they need watering.
 
 ## Wiring Diagrams
 ### Sensor Module
