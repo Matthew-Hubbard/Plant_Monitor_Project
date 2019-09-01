@@ -7,17 +7,17 @@ class Sensor_data(models.Model):
 
     def __str__(self):
         return ("\
-            \nid:\t\t{0:d}\
-            \nsensor_id:\t{1:f}\
-            \ntemp_soil:\t{2:f}\
-            \ntemp_room:\t{3:f}\
-            \nhumidity:\t{4:f}\
-            \nheat_index:\t{5:f}\
-            \nmoisture:\t{6:f}\
-            \nlux:\t\t{7:f}\
-            \nvisible:\t{8:f}\
-            \nir:\t{9:f}\
-            \nfull:\t{10:f}\
+            \nid:\t\t{0:d}, \
+            \nsensor_id:\t{1:d}, \
+            \ntemp_soil:\t{2:f}, \
+            \ntemp_room:\t{3:f}, \
+            \nhumidity:\t{4:f}, \
+            \nheat_index:\t{5:f}, \
+            \nmoisture:\t{6:f}, \
+            \nlux:\t\t{7:f}, \
+            \nvisible:\t{8:d}, \
+            \nir:\t{9:d}, \
+            \nfull:\t{10:d}, \
             \ntimestamp:\t{11:s}\n"\
             .format(self.id, self.sensor_id, self.temp_soil, self.temp_room, self.humidity, \
                 self.heat_index, self.moisture, self.lux, self.visible, self.ir, self.full, \

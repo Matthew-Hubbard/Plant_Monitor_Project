@@ -3,6 +3,9 @@ from django.http import HttpResponse
 from .forms import Sensor_form
 from django.utils import timezone 
 from django.views.decorators.csrf import csrf_exempt #fix this to make more secure... 
+from .models import Sensor_data
+from django.http import JsonResponse
+from django.core import serializers
 
 # Create your views here.
 
@@ -29,3 +32,7 @@ def send_data(request):
             print(request.body)
 
     return HttpResponse("Hello, world. You're at send data.")
+
+def sensor_data_all(request, sensor_id):
+    data = serializers.serialize('json',Sensor_data.objects.order_by('timestamp'))
+    return JsonResponse(data, safe=False)
