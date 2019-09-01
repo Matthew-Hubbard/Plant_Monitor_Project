@@ -1,0 +1,43 @@
+{% load static %}
+<html>
+  <head>
+      <title>Sensor Data</title>
+      <link rel="stylesheet" href="{% static 'css/sensors.css' %}">
+  </head>
+  <body>
+    {% if data_list %}
+      <table>
+        <tr>
+          <th>Sensor ID</th>
+          <th>Timestamp</th>
+          <th>Room Temp</th>
+          <th>Soil Temp</th>
+          <th>Humidity</th>
+          <th>Heat Index</th>
+          <th>Moisture</th>
+          <th>Lux</th>
+          <th>Visible</th>
+          <th>IR</th>
+          <th>Full</th>
+        </tr>
+        {% for data in data_list %}
+          <tr>
+            <td>{{ data.sensor_id }}</td>
+            <td>{{ data.timestamp }}</td>
+            <td>{{ data.temp_room }}</td>
+            <td>{{ data.temp_soil }}</td>
+            <td>{{ data.humidity }}</td>
+            <td>{{ data.heat_index }}</td>
+            <td>{{ data.moisture }}</td>
+            <td>{{ data.lux }}</td>
+            <td>{{ data.visible }}</td>
+            <td>{{ data.ir }}</td>
+            <td>{{ data.full }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+        <p>No data is available.</p>
+    {% endif %}
+  </body>
+</html>

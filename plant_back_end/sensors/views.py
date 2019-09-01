@@ -10,7 +10,10 @@ from django.core import serializers
 # Create your views here.
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the sensors index.")
+#    return HttpResponse("Hello, world. You're at the sensors index.")
+    data_list = Sensor_data.objects.order_by('timestamp')[:5]
+    context = {'data_list': data_list}
+    return render(request, 'sensors/index.html', context)
 
 @csrf_exempt
 def send_data(request):
