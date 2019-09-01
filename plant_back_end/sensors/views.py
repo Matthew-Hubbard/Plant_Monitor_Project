@@ -19,10 +19,13 @@ def index(request):
 def send_data(request):
     if request.method == 'POST':
         print ("Got POST request.")
+        print("Body: ")
+        print(request.body)
         #https://tutorial.djangogirls.org/en/django_forms/
         form = Sensor_form(request.POST) #create a form from request.POST (see forms.py)
         if form.is_valid():
             print("form.is_valid() is True.")
+            print("POST: ")
             print (request.POST)
             print (form)
             post = form.save(commit=False)
@@ -33,6 +36,8 @@ def send_data(request):
         else:
             print("form isn't valid.")
             print(request.body)
+            print(form.errors)
+            return HttpResponse(form.errors)
 
     return HttpResponse("Hello, world. You're at send data.")
 
