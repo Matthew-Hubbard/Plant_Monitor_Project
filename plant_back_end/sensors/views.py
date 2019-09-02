@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt #fix this to make more secu
 from .models import Sensor_data
 from django.http import JsonResponse
 from django.core import serializers
+# import json
 
 # Create your views here.
 
@@ -21,12 +22,16 @@ def send_data(request):
         print ("Got POST request.")
         print("Body: ")
         print(request.body)
+        #json_data = json.loads(str(request.body, encoding='utf-8'))
+        #print("\njson_data: ")
+        #print(json_data['sensor_id'])
+        #print("\n")
         #https://tutorial.djangogirls.org/en/django_forms/
         form = Sensor_form(request.POST) #create a form from request.POST (see forms.py)
         if form.is_valid():
             print("form.is_valid() is True.")
-            print("POST: ")
-            print (request.POST)
+            #print("POST: ")
+            #print (request.POST)
             print (form)
             post = form.save(commit=False)
             post.timestamp = timezone.now()
@@ -36,7 +41,7 @@ def send_data(request):
         else:
             print("form isn't valid.")
             print(request.body)
-            print(form.errors)
+            print(form.errors.as_data())
             return HttpResponse(form.errors)
 
     return HttpResponse("Hello, world. You're at send data.")
