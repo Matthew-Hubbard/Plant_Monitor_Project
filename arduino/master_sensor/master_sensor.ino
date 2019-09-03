@@ -1,3 +1,6 @@
+#include <SoftwareSerial.h>
+
+SoftwareSerial espSerial(11, 10); // RX, TX , Used to send data to ESP8266
 
 #include "DHT.h" // DHT library
 #include <OneWire.h> // Used for soil temp probe
@@ -65,6 +68,8 @@ void setup() {
   // Start serial for debugging
   Serial.begin(9600);
   while(!Serial); //wait until serial is setup
+
+  espSerial.begin(9600); // esp serial connection
 
   //DHT22
   Serial.println(F("DHT22 test!"));
