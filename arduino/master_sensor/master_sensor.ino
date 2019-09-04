@@ -40,13 +40,17 @@ struct light_sensor
 light_sensor light_data; // holds all of the TSL2591 light sensor data
 
 SoftwareSerial esp_serial(ESP_TX, ESP_RX); // RX, TX , Used to send data to ESP8266
+const int SERIAL_DELAY = 1000;
+const int SERIAL_ITTER = 100;
 
 OneWire oneWire(SOIL_TEMP_PIN);
 DallasTemperature sensors(&oneWire);
 float Celcius=0;
-float Fahrenheit=0;
+float temp_soil=0;
 
 Adafruit_TSL2591 tsl = Adafruit_TSL2591(2591); // pass in a number for the sensor identifier (for your use later)
+
+int sensor_id = 0;
 
 // Functions
 float get_moisture();
@@ -54,7 +58,7 @@ void get_dht(dht_data_struct & dht_in);
 void configureSensor(void); // tsl2591 lux
 void displaySensorDetails(void); //lux 
 void advancedRead(light_sensor & light_data); //lux
-
+int send_data(const String & data, SoftwareSerial & espSerial);
 
 /////////////////////////////////////////////////
 
@@ -96,6 +100,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
+  Serial.print("Sensor ID: " + sensor_id);
   moisture_raw = get_moisture();
   Serial.print("Moisture: ");
   Serial.print(moisture_raw);
@@ -116,10 +121,10 @@ void loop() {
   //Soil temp probe ***CHANGE TO USE STRUCT AND CALL FUNC****
   sensors.requestTemperatures();
   Celcius=sensors.getTempCByIndex(0);
-  Fahrenheit=sensors.toFahrenheit(Celcius);
+  temp_soil=sensors.toFahrenheit(Celcius);
   //Serial.print(Celcius);
   Serial.print(" Soil temp F: ");
-  Serial.print(Fahrenheit);  
+  Serial.print(temp_soil);  
 
   advancedRead(light_data);
 
@@ -127,6 +132,20 @@ void loop() {
   Serial.print(F("Full: ")); Serial.print(light_data.full); Serial.print(F("  "));
   Serial.print(F("Visible: ")); Serial.print(light_data.visible); Serial.print(F("  "));
   Serial.print(F("Lux: ")); Serial.println(light_data.lux, 6);
+
+  //Send to ESP
+  send_data(String(sensor_id), esp_serial);
+  send_data(String(temp_soil), esp_serial);
+  send_data(String(dht_data.air_temp_f), esp_serial);
+  send_data(String(dht_data.humidity), esp_serial);
+  send_data(String(dht_data.heat_index_f), esp_serial);
+  send_data(String(moisture_raw), esp_serial);
+  send_data(String(light_data.lux), esp_serial);
+  send_data(String(light_data.visible), esp_serial);
+  send_data(String(light_data.ir), esp_serial);
+  send_data(String(light_data.full), esp_serial);
+
+  Serial.println("\nSent all data to ESP!\n");
 
   delay(5000);
 }
@@ -229,4 +248,67 @@ void advancedRead(light_sensor & light_data)
   light_data.full = light_data.lum & 0xFFFF;
   light_data.visible = light_data.full - light_data.ir;
   light_data.lux = tsl.calculateLux(light_data.full, light_data.ir);
+}
+
+// Send data via software serial
+int send_data(const String & data, SoftwareSerial & serial_out)
+{
+  String recieved = ""; // message back from serial
+  int i = 0;
+  int num_bytes = serial_out.availableForWrite(); // check if we have anything still in write buffer
+  if(num_bytes > 0)
+  {
+    Serial.print("[Arduino] [ERROR] : Bytes in write buffer. (num_bytes: ");
+    Serial.print(num_bytes);
+    Serial.println(")");
+    Serial.println("Flushing...");
+    serial_out.flush();
+  }
+  
+  //Debugging info
+  Serial.println("[Arduino] : Writing data over serial to ESP...");
+  Serial.println("[Arduino] : " + data + " -> [ESP]");
+  
+  // Sending data over serial
+  serial_out.write(data.c_str());
+
+  delay(SERIAL_DELAY);
+
+  // Now wait for confirmation from ESP. ESP Should send data back to confirm.
+
+  while(!serial_out.available() && i < SERIAL_ITTER) {++i;} // Wait for serial_out read buffer to be empty...
+
+  if(i == SERIAL_ITTER - 1 )
+  {
+    Serial.print("[Arduino] [ERROR] : serial_out not available to read! (read buffer not empty!)");
+    return -1;
+  }
+
+  i = 0;
+  while(recieved != data && i < SERIAL_ITTER)
+  {
+    //while (serial_out.available())
+    {
+      recieved = serial_out.readString();
+    }
+    ++i;
+  }
+  if(i >= SERIAL_ITTER - 1)
+  {
+    Serial.println("[Arduino] [ERROR] : Couldn't recieve confirmation from ESP. (recieved: " + recieved + ")");
+    return -2;
+  }
+  else
+  {
+    Serial.println("[ESP] : " + recieved);
+    if(recieved == data)
+      Serial.println("[Arduino] : Transmition success!");
+    else
+    {
+        Serial.println("[Arduino] : Transmition failed.");
+    }
+    
+    serial_out.flush();
+    return 0;
+  }
 }
