@@ -1,10 +1,3 @@
-/**
-   BasicHTTPClient.ino
-
-    Created on: 24.05.2015
-
-*/
-
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
@@ -44,8 +37,8 @@ void setup() {
 void loop() {
   // wait for WiFi connection
 
-  String sensor_msg = "";
-  boolean msg_ready = false;
+  //String sensor_msg = "";
+  //boolean msg_ready = false;
   
   WiFiClient client;
   HTTPClient http;
@@ -59,22 +52,18 @@ void loop() {
     //String payload = "--boundary\r\nContent-Disposition: form-data; name=\"sensor_id\"\r\n\r\n7\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_soil\"\r\n\r\n11.11\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_room\"\r\n\r\n22.22\r\n--boundary\r\nContent-Disposition: form-data; name=\"humidity\"\r\n\r\n33.33\r\n--boundary\r\nContent-Disposition: form-data; name=\"heat_index\"\r\n\r\n44.44\r\n--boundary\r\nContent-Disposition: form-data; name=\"moisture\"\r\n\r\n55.55\r\n--boundary\r\nContent-Disposition: form-data; name=\"lux\"\r\n\r\n66.66\r\n--boundary\r\nContent-Disposition: form-data; name=\"visible\"\r\n\r\n777\r\n--boundary\r\nContent-Disposition: form-data; name=\"ir\"\r\n\r\n888\r\n--boundary\r\nContent-Disposition: form-data; name=\"full\"\r\n\r\n999\r\n--boundary--";
 
     // Get sensor data from serial connection
-    sensor_msg = "";
-    while(Serial.available()){
-      sensor_msg = Serial.readString();
-      msg_ready = true;
-    }
+  }
 
     String payload = "--boundary\r\nContent-Disposition: form-data; name=\"sensor_id\"\r\n\r\n";
-    if(msg_ready)
-    {
+    //if(msg_ready)
+    //{
       Serial.print("[HTTP] POST...\n");
-      payload += sensor_msg;
+      payload += "9";
       payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_soil\"\r\n\r\n11.11\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_room\"\r\n\r\n22.22\r\n--boundary\r\nContent-Disposition: form-data; name=\"humidity\"\r\n\r\n33.33\r\n--boundary\r\nContent-Disposition: form-data; name=\"heat_index\"\r\n\r\n44.44\r\n--boundary\r\nContent-Disposition: form-data; name=\"moisture\"\r\n\r\n55.55\r\n--boundary\r\nContent-Disposition: form-data; name=\"lux\"\r\n\r\n66.66\r\n--boundary\r\nContent-Disposition: form-data; name=\"visible\"\r\n\r\n777\r\n--boundary\r\nContent-Disposition: form-data; name=\"ir\"\r\n\r\n888\r\n--boundary\r\nContent-Disposition: form-data; name=\"full\"\r\n\r\n999\r\n--boundary--";
       int httpCode = http.POST(payload);
       Serial.print("httpCode: ");
       Serial.print(httpCode);
-    }
+    //}
   }
 
   delay(10000);
