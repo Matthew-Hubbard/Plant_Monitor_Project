@@ -1,38 +1,24 @@
-#include <SoftwareSerial.h>
-
-SoftwareSerial espSerial(11, 10); // RX, TX , Used to send data to ESP8266
-
+#include <SoftwareSerial.h> // Communitcate to ESP
 #include "DHT.h" // DHT library
 #include <OneWire.h> // Used for soil temp probe
 #include <DallasTemperature.h> // Used for soil temp probe
+#include <Wire.h> // TSL2591 light sensor
+#include <Adafruit_Sensor.h> // TSL2591 light sensor
+#include "Adafruit_TSL2591.h" // TSL2591  light sensor (Dynamic Range: 600M:1, Max Lux: 88k)
 
-/* TSL2591 Digital Light Sensor */
-/* Dynamic Range: 600M:1 */
-/* Maximum Lux: 88K */
-#include <Wire.h> // LUX
-#include <Adafruit_Sensor.h> //LUX
-#include "Adafruit_TSL2591.h" // LUX
-
+// Pins
 #define MOISTURE_PIN 0 // Moisture sensor data connected to analog pin 0
 #define DHTPIN 2
-#define ONE_WIRE_BUS 3 // Soil temp data pin
+#define SOIL_TEMP_PIN 3 // Soil temp data pin
+#define ESP_TX 11
+#define ESP_RX 10
 
-// Moisture Sensor Vars
-const float AIR_DRY = 625; // reading in dry air
-const float DRY_SOIL = 550; // max reading of dry soil out of bag
-const float WATERED = 370; // lowest reading after watering through
-
-float raw_val = 0;
-float moisture = 0; //scale from 0-10 dry to wet
+float moisture_raw = 0.0;
+//float moisture = 0; //scale from 0-10 dry to wet
 
 // DHT-22 Humidity/Air Temp Vars
-#define DHTTYPE 22
+#define DHTTYPE 22 
 DHT dht(DHTPIN, DHTTYPE);
-//float humidity = 0.0;
-//float air_temp_c = 0.0;
-//float air_temp_f = 0.0;
-//float heat_index_c = 0.0;
-//float heat_index_f = 0.0;
 struct dht_data_struct
 {
   float humidity = 0.0;
@@ -43,13 +29,23 @@ struct dht_data_struct
 };
 dht_data_struct dht_data; // holds all of dht22 data
 
-// Soil temp vars
-OneWire oneWire(ONE_WIRE_BUS);
+struct light_sensor
+{
+  uint32_t lum = 0;
+  uint16_t ir = 0;
+  uint16_t full = 0;
+  uint16_t visible = 0;
+  float lux = 0;
+};
+light_sensor light_data; // holds all of the TSL2591 light sensor data
+
+SoftwareSerial esp_serial(ESP_TX, ESP_RX); // RX, TX , Used to send data to ESP8266
+
+OneWire oneWire(SOIL_TEMP_PIN);
 DallasTemperature sensors(&oneWire);
 float Celcius=0;
 float Fahrenheit=0;
 
-// LUX Vars
 Adafruit_TSL2591 tsl = Adafruit_TSL2591(2591); // pass in a number for the sensor identifier (for your use later)
 
 // Functions
@@ -57,7 +53,7 @@ float get_moisture();
 void get_dht(dht_data_struct & dht_in);
 void configureSensor(void); // tsl2591 lux
 void displaySensorDetails(void); //lux 
-void advancedRead(void); //lux
+void advancedRead(light_sensor & light_data); //lux
 
 
 /////////////////////////////////////////////////
@@ -69,7 +65,7 @@ void setup() {
   Serial.begin(9600);
   while(!Serial); //wait until serial is setup
 
-  espSerial.begin(9600); // esp serial connection
+  esp_serial.begin(9600); // esp serial connection
 
   //DHT22
   Serial.println(F("DHT22 test!"));
@@ -81,9 +77,7 @@ void setup() {
     Serial.println(F("Starting Adafruit TSL2591 Test!"));
   
   if (tsl.begin()) 
-  {
     Serial.println(F("Found a TSL2591 sensor"));
-  } 
   else 
   {
     Serial.println(F("No sensor found ... check your wiring?"));
@@ -102,9 +96,9 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  moisture = get_moisture();
+  moisture_raw = get_moisture();
   Serial.print("Moisture: ");
-  Serial.print(moisture);
+  Serial.print(moisture_raw);
 
   get_dht(dht_data);
   Serial.print(F(" Humidity: "));
@@ -127,17 +121,24 @@ void loop() {
   Serial.print(" Soil temp F: ");
   Serial.print(Fahrenheit);  
 
-  advancedRead();
+  advancedRead(light_data);
+
+  Serial.print(F(" IR: ")); Serial.print(light_data.ir);  Serial.print(F("  "));
+  Serial.print(F("Full: ")); Serial.print(light_data.full); Serial.print(F("  "));
+  Serial.print(F("Visible: ")); Serial.print(light_data.visible); Serial.print(F("  "));
+  Serial.print(F("Lux: ")); Serial.println(light_data.lux, 6);
 
   delay(5000);
 }
-
 /////////////////////////////////////////////////
+
+////////////FUNCTIONS///////////////////////////
 
 float get_moisture()
 {
-  raw_val = analogRead(MOISTURE_PIN); //connect sensor to Analog 0
-  return ((DRY_SOIL - raw_val)/(DRY_SOIL - WATERED)) * 10.0;
+  moisture_raw = analogRead(MOISTURE_PIN); //connect sensor to Analog 0
+  //return ((DRY_SOIL - moisture_raw)/(DRY_SOIL - WATERED)) * 10.0;
+  return moisture_raw;
 }
 
 void get_dht(dht_data_struct & dht_in)
@@ -221,17 +222,11 @@ void displaySensorDetails(void)
   delay(500);
 }
 
-void advancedRead(void)
+void advancedRead(light_sensor & light_data)
 {
-  // More advanced data read example. Read 32 bits with top 16 bits IR, bottom 16 bits full spectrum
-  // That way you can do whatever math and comparisons you want!
-  uint32_t lum = tsl.getFullLuminosity();
-  uint16_t ir, full;
-  ir = lum >> 16;
-  full = lum & 0xFFFF;
-  Serial.print(F("[ ")); Serial.print(millis()); Serial.print(F(" ms ] "));
-  Serial.print(F("IR: ")); Serial.print(ir);  Serial.print(F("  "));
-  Serial.print(F("Full: ")); Serial.print(full); Serial.print(F("  "));
-  Serial.print(F("Visible: ")); Serial.print(full - ir); Serial.print(F("  "));
-  Serial.print(F("Lux: ")); Serial.println(tsl.calculateLux(full, ir), 6);
+  light_data.lum = tsl.getFullLuminosity();
+  light_data.ir = light_data.lum >> 16;
+  light_data.full = light_data.lum & 0xFFFF;
+  light_data.visible = light_data.full - light_data.ir;
+  light_data.lux = tsl.calculateLux(light_data.full, light_data.ir);
 }
