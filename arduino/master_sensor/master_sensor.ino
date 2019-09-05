@@ -40,8 +40,9 @@ struct light_sensor
 light_sensor light_data; // holds all of the TSL2591 light sensor data
 
 SoftwareSerial esp_serial(ESP_TX, ESP_RX); // RX, TX , Used to send data to ESP8266
-const int SERIAL_DELAY = 1000;
+const int SERIAL_DELAY = 250;
 const int SERIAL_ITTER = 100;
+String msg = "";
 
 OneWire oneWire(SOIL_TEMP_PIN);
 DallasTemperature sensors(&oneWire);
@@ -58,6 +59,7 @@ void get_dht(dht_data_struct & dht_in);
 void configureSensor(void); // tsl2591 lux
 void displaySensorDetails(void); //lux 
 void advancedRead(light_sensor & light_data); //lux
+int recieve_data(String & data, SoftwareSerial & serial_in);
 int send_data(const String & data, SoftwareSerial & espSerial);
 
 /////////////////////////////////////////////////
@@ -72,19 +74,19 @@ void setup() {
   esp_serial.begin(9600); // esp serial connection
 
   //DHT22
-  Serial.println(F("DHT22 test!"));
+  Serial.println(F("[Arduino] : DHT22 test!"));
   dht.begin();
 
   //Soil temp
   sensors.begin();
 
-    Serial.println(F("Starting Adafruit TSL2591 Test!"));
+    Serial.println(F("[Arduino] : Starting Adafruit TSL2591 Test!"));
   
   if (tsl.begin()) 
-    Serial.println(F("Found a TSL2591 sensor"));
+    Serial.println(F("[Arduino] : Found a TSL2591 sensor"));
   else 
   {
-    Serial.println(F("No sensor found ... check your wiring?"));
+    Serial.println(F("[Arduino] : No sensor found ... check your wiring?"));
     while (1);
   }
     
@@ -94,13 +96,25 @@ void setup() {
   /* Configure the sensor */
   configureSensor();
 
-  Serial.println("Setup Finished.");
+  Serial.println("[Arduino] : Waiting for ESP to finish setup.");
+  delay(10000); // wait for ESP
+/*
+  Serial.println("[Arduino] : Setup Finished.");
+  while(msg != "ESP READY")
+  {
+    send_data("ARDUINO READY", esp_serial);
+    delay(1000);
+    recieve_data(msg, esp_serial);
+  }
+  
+  Serial.println("[Arduino] : ESP setup complete.");
+  */
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 
-  Serial.print("Sensor ID: " + sensor_id);
+  Serial.print("[Arduino] : Sensor ID: " + sensor_id);
   moisture_raw = get_moisture();
   Serial.print("Moisture: ");
   Serial.print(moisture_raw);
@@ -250,20 +264,78 @@ void advancedRead(light_sensor & light_data)
   light_data.lux = tsl.calculateLux(light_data.full, light_data.ir);
 }
 
+/*
+//recieve data from ESP
+int recieve_data(String & data, SoftwareSerial & serial_in)
+{
+  data = "";
+  int i = 0;
+
+  // Wait for serial_in read buffer to be empty...
+  while(!serial_in.available() && i < SERIAL_ITTER) {++i;} 
+
+  if(i == SERIAL_ITTER - 1 )
+  {
+    // serial_in not available to read! (read buffer not empty!)");
+    recieve_data(data, serial_in);
+    return -1;
+  }
+
+  //get data from Arduino Sensor
+  i = 0;
+  while (serial_in.available() && i < SERIAL_ITTER)
+  //while (serial_in.available())
+  {
+    data = serial_in.readString();
+    ++i;
+  }
+
+  Serial.println("[ESP] : " + data);
+
+  if(i >= SERIAL_ITTER - 1)
+  {
+    //[ERROR] : Couldn't recieve data
+    recieve_data(data, serial_in);
+    return -2;
+  }
+
+ // Send data back to ESP to confirm transmition
+
+// int num_bytes = serial_in.availableForWrite(); // check if we have anything still in write buffer
+// if(num_bytes > 0)
+// {
+   // [ERROR] : bytes already in write buffer...
+   serial_in.flush();
+ //}
+ 
+ // Sending data over serial to arduino sensor
+ delay(SERIAL_DELAY);
+ Serial.println("[ARDUINO] : " + data + " -> [ESP]");
+ if(data != "")
+   serial_in.write(data.c_str());
+  else
+  {
+    recieve_data(data, serial_in);
+  }
+  
+ return 0;
+}
+*/
+
 // Send data via software serial
 int send_data(const String & data, SoftwareSerial & serial_out)
 {
   String recieved = ""; // message back from serial
   int i = 0;
-  int num_bytes = serial_out.availableForWrite(); // check if we have anything still in write buffer
-  if(num_bytes > 0)
-  {
-    Serial.print("[Arduino] [ERROR] : Bytes in write buffer. (num_bytes: ");
-    Serial.print(num_bytes);
-    Serial.println(")");
-    Serial.println("Flushing...");
+  //int num_bytes = serial_out.availableForWrite(); // check if we have anything still in write buffer //no availableForWrite on softwareserial?
+  //if(num_bytes > 0)
+  //{
+  //  Serial.print("[Arduino] [ERROR] : Bytes in write buffer. (num_bytes: ");
+  //  Serial.print(num_bytes);
+  //  Serial.println(")");
+  //  Serial.println("Flushing...");
     serial_out.flush();
-  }
+  //}
   
   //Debugging info
   Serial.println("[Arduino] : Writing data over serial to ESP...");
