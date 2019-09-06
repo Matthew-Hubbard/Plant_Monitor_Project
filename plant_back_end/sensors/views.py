@@ -15,22 +15,30 @@ from django.db.models import Max
 
 def index(request):
     num_entries = 50
-    max_sensor_id = Sensor_data.objects.all().aggregate(Max('sensor_id'))['sensor_id__max']
-    print("max_sensor_id: %d" % max_sensor_id)
-    # Need to send last 50 entries for each sensor (maybe put into array and iterate from 0 to max_sensor_id)
+    id_list = list(Sensor_data.objects.values_list('sensor_id', flat=True).distinct())
+    sample_times = {}
+    sample_times_str = {}
+    soil_temp_data = {}
+    lux_data = {}
 
-    data_list = Sensor_data.objects.order_by('-timestamp')[:num_entries]
-    soil_temp_data = list(Sensor_data.objects.filter(sensor_id=0).order_by('-timestamp').values_list('temp_soil', flat=True))[:num_entries]
-    lux_data = list(Sensor_data.objects.filter(sensor_id=0).order_by('-timestamp').values_list('lux', flat=True))[:num_entries]
-    sample_times = list(Sensor_data.objects.filter(sensor_id=0).order_by('-timestamp').values_list('timestamp', flat=True))[:num_entries]
-    sample_times_str = []
-    for time in sample_times:
-        # sample_times_str.append(time.strftime(""))
-        sample_times_str.append(time.isoformat())
-    print("sample_times_str: \n")
-    print(sample_times_str)
-    print("\n")
-    context = {'data_list': data_list, 'soil_temp_data': soil_temp_data, 'sample_times': sample_times_str, 'lux_data': lux_data}
+    for id in id_list: # Gather last num_entries readings for each arduino 
+        sample_times[id] = list(Sensor_data.objects.filter(sensor_id=id).order_by('-timestamp').values_list('timestamp', flat=True))[:num_entries]
+        sample_times_str[id] = []
+        # print(sample_times[id])
+        # convert time to ISO
+        for time in sample_times[id]:
+            sample_times_str[id].append(time.isoformat())
+        print("sample_times_str: \n")
+        print(sample_times_str[id])
+        print("\n")
+
+        soil_temp_data[id] = list(Sensor_data.objects.filter(sensor_id=id).order_by('-timestamp').values_list('temp_soil', flat=True))[:num_entries]
+        lux_data[id] = list(Sensor_data.objects.filter(sensor_id=id).order_by('-timestamp').values_list('lux', flat=True))[:num_entries]
+
+        print(soil_temp_data[id])
+        print(lux_data[id])
+
+    context = {'id_list': id_list, 'sample_times': sample_times_str, 'soil_temp_data': soil_temp_data, 'lux_data': lux_data}
     return render(request, 'sensors/index.html', context)
 
 def table(request):

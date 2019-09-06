@@ -2,119 +2,122 @@
 
 <script>
 {% block jquery %}
-  {% if soil_temp_data and sample_times %}
-    console.log("Soil Temp Data: \n");
-    console.log({{ soil_temp_data }});
-    console.log("Soil Temp Time: \n");
-    console.log({{ sample_times|safe }});
+  console.log("test");
+  console.log({{ id_list }});
+  {% for id in id_list %}
+    console.log({{ soil_temp_data }}["{{ id }}"]);
+  {% endfor %}
+  {% for id in id_list %}
+    {% if soil_temp_data and sample_times %}
+      var ctx = document.getElementById('temp_soil_chart_{{ id }}').getContext('2d');
+      var temp_soil_chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: {{ sample_times|safe }}["{{ id }}"], 
+              datasets: [{
+                  label: 'Soil Temperature',
+                  data: {{ soil_temp_data }}["{{ id }}"],
+                  {% comment %} backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(255, 159, 64, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
+                  ], {% endcomment %}
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: false
+                      }
+                  }],
+                  xAxes: [{
+                    type: 'time'
+                  }]
+              }
+          }
+      });
+    {% endif %}
 
-    var ctx = document.getElementById('temp_soil_chart').getContext('2d');
-    var temp_soil_chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {{ sample_times|safe }},
-            datasets: [{
-                label: 'Soil Temperature',
-                data: {{ soil_temp_data }},
-                {% comment %} backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ], {% endcomment %}
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: false
-                    }
-                }],
-                xAxes: [{
-                  type: 'time'
-                }]
-            }
-        }
-    });
-  {% endif %}
+    {% if lux_data and sample_times %}
+      console.log("Lux Data {{ id }}: \n");
+      console.log({{ lux_data }}["{{ id }}"]);
+      console.log("Time {{ id }}: \n");
+      console.log({{ sample_times|safe }}["{{ id }}"]);
 
-  {% if lux_data and sample_times %}
-    console.log("Lux Data: \n");
-    console.log({{ lux_data }});
-    console.log("Time: \n");
-    console.log({{ sample_times|safe }});
-
-    var ctx = document.getElementById('lux_chart').getContext('2d');
-    var temp_soil_chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {{ sample_times|safe }},
-            datasets: [{
-                label: 'Lux',
-                data: {{ lux_data }},
-                {% comment %} backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ], {% endcomment %}
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: false
-                    }
-                }],
-                xAxes: [{
-                  type: 'time'
-                }]
-            }
-        }
-    });
-  {% endif %}
-
+      var ctx = document.getElementById('lux_chart_{{ id }}').getContext('2d');
+      var lux_chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: {{ sample_times|safe }}["{{ id }}"],
+              datasets: [{
+                  label: 'Lux',
+                  data: {{ lux_data }}["{{ id }}"],
+                  {% comment %} backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(255, 159, 64, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
+                  ], {% endcomment %}
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: false
+                      }
+                  }],
+                  xAxes: [{
+                    type: 'time'
+                  }]
+              }
+          }
+      });
+    {% endif %}
+  {% endfor %} // End the for loop going through all sensor ids
 {% endblock %}
 </script>
 
 {% block content %}
-<div class='row'>
-    <div class='col-md-12'>
-        <h1 class='display-4'>Sensor 0 Graphs</h1> 
+  {% for id in id_list %}
+    <div class='row'>
+        <div class='col-md-12'>
+            <h1 class='display-4'>Sensor {{ id }} Graphs</h1> 
+        </div>
     </div>
-</div>
-<div class='row'>
-    <div class='col-md-6'>
-        <h3 style="text-align: center">Soil Temperature <span class="badge badge-primary">Sensor 0</span></h3>
-        <canvas id="temp_soil_chart" width="600" height="400"></canvas>
+    <div class='row'>
+        <div class='col-md-6'>
+            <h3 style="text-align: center">Soil Temperature <span class="badge badge-primary">Sensor {{ id }}</span></h3>
+            <canvas id="temp_soil_chart_{{ id }}" width="600" height="400"></canvas>
+        </div>
+        <div class='col-md-6'>
+            <h3 style="text-align: center">Lux <span class="badge badge-primary">Sensor {{ id }}</span></h3>
+            <canvas id="lux_chart_{{ id }}" width="600" height="400"></canvas>
+        </div>
     </div>
-    <div class='col-md-6'>
-        <h3 style="text-align: center">Lux <span class="badge badge-primary">Sensor 0</span></h3>
-        <canvas id="lux_chart" width="600" height="400"></canvas>
-    </div>
-</div>
+  {% endfor %}
 {% endblock %}
