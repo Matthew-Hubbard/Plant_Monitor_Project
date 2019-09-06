@@ -6,15 +6,40 @@ from django.views.decorators.csrf import csrf_exempt #fix this to make more secu
 from .models import Sensor_data
 from django.http import JsonResponse
 from django.core import serializers
+from datetime import datetime
 # import json
 
 # Create your views here.
 
 def index(request):
-#    return HttpResponse("Hello, world. You're at the sensors index.")
-    data_list = Sensor_data.objects.order_by('timestamp')[:5]
-    context = {'data_list': data_list}
+    num_entries = 50
+    data_list = Sensor_data.objects.order_by('-timestamp')[:num_entries]
+    soil_temp_data = list(Sensor_data.objects.filter(sensor_id=0).order_by('-timestamp').values_list('temp_soil', flat=True))[:num_entries]
+    soil_temp_time = list(Sensor_data.objects.filter(sensor_id=0).order_by('-timestamp').values_list('timestamp', flat=True))[:num_entries]
+    soil_temp_time_str = []
+    for time in soil_temp_time:
+        # soil_temp_time_str.append(time.strftime(""))
+        soil_temp_time_str.append(time.isoformat())
+    print("soil_temp_time_str: \n")
+    print(soil_temp_time_str)
+    print("\n")
+    context = {'data_list': data_list, 'soil_temp_data': soil_temp_data, 'soil_temp_time': soil_temp_time_str}
     return render(request, 'sensors/index.html', context)
+
+def table(request):
+#    return HttpResponse("Hello, world. You're at the sensors index.")
+    data_list = Sensor_data.objects.order_by('-timestamp')[:50]
+    context = {'data_list': data_list}
+    return render(request, 'sensors/table.html', context)
+
+def table_sensor(request, sensor_id):
+    data_list = Sensor_data.objects.filter(sensor_id=sensor_id).order_by('-timestamp')[:50]
+    context = {'data_list': data_list}
+    return render(request, 'sensors/table.html', context)
+
+def chart(request):
+    return HttpResponse("at sensor/chart")
+
 
 @csrf_exempt
 def send_data(request):
@@ -47,5 +72,5 @@ def send_data(request):
     return HttpResponse("Hello, world. You're at send data.")
 
 def sensor_data_all(request, sensor_id):
-    data = serializers.serialize('json',Sensor_data.objects.order_by('timestamp'))
+    data = serializers.serialize('json',Sensor_data.objects.filter(sensor_id=sensor_id).order_by('-timestamp'))
     return JsonResponse(data, safe=False)

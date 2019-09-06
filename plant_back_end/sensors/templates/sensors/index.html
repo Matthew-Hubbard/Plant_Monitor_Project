@@ -1,43 +1,70 @@
-{% load static %}
-<html>
-  <head>
-      <title>Sensor Data</title>
-      <link rel="stylesheet" href="{% static 'css/sensors.css' %}">
-  </head>
-  <body>
-    {% if data_list %}
-      <table>
-        <tr>
-          <th>Sensor ID</th>
-          <th>Timestamp</th>
-          <th>Room Temp</th>
-          <th>Soil Temp</th>
-          <th>Humidity</th>
-          <th>Heat Index</th>
-          <th>Moisture</th>
-          <th>Lux</th>
-          <th>Visible</th>
-          <th>IR</th>
-          <th>Full</th>
-        </tr>
-        {% for data in data_list %}
-          <tr>
-            <td>{{ data.sensor_id }}</td>
-            <td>{{ data.timestamp }}</td>
-            <td>{{ data.temp_room }}</td>
-            <td>{{ data.temp_soil }}</td>
-            <td>{{ data.humidity }}</td>
-            <td>{{ data.heat_index }}</td>
-            <td>{{ data.moisture }}</td>
-            <td>{{ data.lux }}</td>
-            <td>{{ data.visible }}</td>
-            <td>{{ data.ir }}</td>
-            <td>{{ data.full }}</td>
-          </tr>
-        {% endfor %}
-      </table>
-    {% else %}
-        <p>No data is available.</p>
-    {% endif %}
-  </body>
-</html>
+{% extends 'sensors/base.html' %}
+
+<script>
+{% block jquery %}
+  {% if soil_temp_data and soil_temp_time %}
+    console.log("Soil Temp Data: \n");
+    console.log({{ soil_temp_data }});
+    console.log("Soil Temp Time: \n");
+    console.log({{ soil_temp_time|safe }});
+    {% for time in soil_temp_time %}
+      //console.log("{{ time|date:"D d M Y" }}");
+    {% endfor %}
+  {% endif %}
+
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        //labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: {{ soil_temp_time|safe }},
+        datasets: [{
+            label: 'Soil Temperature Sensor 0',
+            data: {{ soil_temp_data }},
+            {% comment %} backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ], {% endcomment %}
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: false
+                }
+            }],
+            xAxes: [{
+              type: 'time'
+            }]
+        }
+    }
+});
+
+{% endblock %}
+</script>
+
+{% block content %}
+<div class='row'>
+    <div class='col-md-12'>
+        {% comment %} <h1>Sensor Graphs</h1> {% endcomment %}
+        <div class='col-md-12'>
+            <canvas id="myChart" width="600" height="400"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
