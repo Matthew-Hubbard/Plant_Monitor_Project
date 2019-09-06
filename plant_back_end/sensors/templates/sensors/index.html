@@ -2,17 +2,17 @@
 
 <script>
 {% block jquery %}
-  {% if soil_temp_data and soil_temp_time %}
+  {% if soil_temp_data and sample_times %}
     console.log("Soil Temp Data: \n");
     console.log({{ soil_temp_data }});
     console.log("Soil Temp Time: \n");
-    console.log({{ soil_temp_time|safe }});
+    console.log({{ sample_times|safe }});
 
     var ctx = document.getElementById('temp_soil_chart').getContext('2d');
     var temp_soil_chart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: {{ soil_temp_time|safe }},
+            labels: {{ sample_times|safe }},
             datasets: [{
                 label: 'Soil Temperature',
                 data: {{ soil_temp_data }},
@@ -50,17 +50,17 @@
     });
   {% endif %}
 
-  {% if lux_data and soil_temp_time %}
+  {% if lux_data and sample_times %}
     console.log("Lux Data: \n");
     console.log({{ lux_data }});
     console.log("Time: \n");
-    console.log({{ soil_temp_time|safe }});
+    console.log({{ sample_times|safe }});
 
     var ctx = document.getElementById('lux_chart').getContext('2d');
     var temp_soil_chart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: {{ soil_temp_time|safe }},
+            labels: {{ sample_times|safe }},
             datasets: [{
                 label: 'Lux',
                 data: {{ lux_data }},
@@ -104,14 +104,17 @@
 {% block content %}
 <div class='row'>
     <div class='col-md-12'>
-        {% comment %} <h1>Sensor Graphs</h1> {% endcomment %}
-        <h1>Sensor 0 Graphs</h1> 
-        <div class='col-md-12'>
-            <canvas id="temp_soil_chart" width="600" height="400"></canvas>
-        </div>
-        <div class='col-md-12'>
-            <canvas id="lux_chart" width="600" height="400"></canvas>
-        </div>
+        <h1 class='display-4'>Sensor 0 Graphs</h1> 
+    </div>
+</div>
+<div class='row'>
+    <div class='col-md-6'>
+        <h3 style="text-align: center">Soil Temperature <span class="badge badge-primary">Sensor 0</span></h3>
+        <canvas id="temp_soil_chart" width="600" height="400"></canvas>
+    </div>
+    <div class='col-md-6'>
+        <h3 style="text-align: center">Lux <span class="badge badge-primary">Sensor 0</span></h3>
+        <canvas id="lux_chart" width="600" height="400"></canvas>
     </div>
 </div>
 {% endblock %}

@@ -7,24 +7,30 @@ from .models import Sensor_data
 from django.http import JsonResponse
 from django.core import serializers
 from datetime import datetime
+from django.db.models import Max
+
 # import json
 
 # Create your views here.
 
 def index(request):
     num_entries = 50
+    max_sensor_id = Sensor_data.objects.all().aggregate(Max('sensor_id'))['sensor_id__max']
+    print("max_sensor_id: %d" % max_sensor_id)
+    # Need to send last 50 entries for each sensor (maybe put into array and iterate from 0 to max_sensor_id)
+
     data_list = Sensor_data.objects.order_by('-timestamp')[:num_entries]
     soil_temp_data = list(Sensor_data.objects.filter(sensor_id=0).order_by('-timestamp').values_list('temp_soil', flat=True))[:num_entries]
     lux_data = list(Sensor_data.objects.filter(sensor_id=0).order_by('-timestamp').values_list('lux', flat=True))[:num_entries]
-    soil_temp_time = list(Sensor_data.objects.filter(sensor_id=0).order_by('-timestamp').values_list('timestamp', flat=True))[:num_entries]
-    soil_temp_time_str = []
-    for time in soil_temp_time:
-        # soil_temp_time_str.append(time.strftime(""))
-        soil_temp_time_str.append(time.isoformat())
-    print("soil_temp_time_str: \n")
-    print(soil_temp_time_str)
+    sample_times = list(Sensor_data.objects.filter(sensor_id=0).order_by('-timestamp').values_list('timestamp', flat=True))[:num_entries]
+    sample_times_str = []
+    for time in sample_times:
+        # sample_times_str.append(time.strftime(""))
+        sample_times_str.append(time.isoformat())
+    print("sample_times_str: \n")
+    print(sample_times_str)
     print("\n")
-    context = {'data_list': data_list, 'soil_temp_data': soil_temp_data, 'soil_temp_time': soil_temp_time_str, 'lux_data': lux_data}
+    context = {'data_list': data_list, 'soil_temp_data': soil_temp_data, 'sample_times': sample_times_str, 'lux_data': lux_data}
     return render(request, 'sensors/index.html', context)
 
 def table(request):
