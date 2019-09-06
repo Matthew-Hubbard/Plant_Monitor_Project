@@ -15,6 +15,7 @@ def index(request):
     num_entries = 50
     data_list = Sensor_data.objects.order_by('-timestamp')[:num_entries]
     soil_temp_data = list(Sensor_data.objects.filter(sensor_id=0).order_by('-timestamp').values_list('temp_soil', flat=True))[:num_entries]
+    lux_data = list(Sensor_data.objects.filter(sensor_id=0).order_by('-timestamp').values_list('lux', flat=True))[:num_entries]
     soil_temp_time = list(Sensor_data.objects.filter(sensor_id=0).order_by('-timestamp').values_list('timestamp', flat=True))[:num_entries]
     soil_temp_time_str = []
     for time in soil_temp_time:
@@ -23,7 +24,7 @@ def index(request):
     print("soil_temp_time_str: \n")
     print(soil_temp_time_str)
     print("\n")
-    context = {'data_list': data_list, 'soil_temp_data': soil_temp_data, 'soil_temp_time': soil_temp_time_str}
+    context = {'data_list': data_list, 'soil_temp_data': soil_temp_data, 'soil_temp_time': soil_temp_time_str, 'lux_data': lux_data}
     return render(request, 'sensors/index.html', context)
 
 def table(request):
