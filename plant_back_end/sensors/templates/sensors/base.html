@@ -28,6 +28,7 @@
     {% include 'base/js.html' %}
     <script>
     $(document).ready(function(){
+      {% block jquery_nav %}{% endblock %}
       {% block jquery %}{% endblock %}
     })
     </script>

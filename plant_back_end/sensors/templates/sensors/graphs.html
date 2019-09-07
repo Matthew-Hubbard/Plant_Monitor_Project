@@ -1,0 +1,122 @@
+{% extends 'sensors/navbar.html' %}
+{% comment %} {% extends 'sensors/base.html' %} {% endcomment %}
+
+<script>
+{% block jquery %}
+    function make_line_chart(chart_name, element_name, label_list, data_list){
+        var ctx = document.getElementById(element_name).getContext('2d');
+        var my_chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label_list, 
+                datasets: [{
+                    label: chart_name,
+                    fill: false,
+                    {% comment %} backgroundColor: "#0b8028", {% endcomment %}
+                    pointRadius: 2,
+                    pointBackgroundColor: "#65a356",
+                    borderColor: "#064f0f",
+                    data: data_list,
+                    {% comment %} backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ], {% endcomment %}
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }],
+                    xAxes: [{
+                    type: 'time'
+                    }]
+                }
+            }
+        });
+    }
+
+    {% for id in id_list %}
+        make_line_chart("Soil Temperature", "temp_soil_chart_{{ id }}", {{ sample_times|safe }}["{{ id }}"], {{ temp_soil_data }}["{{ id }}"]);
+        make_line_chart("Room Temperature", "temp_room_chart_{{ id }}", {{ sample_times|safe }}["{{ id }}"], {{ temp_room_data }}["{{ id }}"]);
+        make_line_chart("Humidity", "humidity_chart_{{ id }}", {{ sample_times|safe }}["{{ id }}"], {{ humidity_data }}["{{ id }}"]);
+        make_line_chart("Heat Index",  "heat_index_chart_{{ id }}", {{ sample_times|safe }}["{{ id }}"], {{ heat_index_data }}["{{ id }}"]);
+        make_line_chart("Moisture",  "moisture_chart_{{ id }}", {{ sample_times|safe }}["{{ id }}"], {{ moisture_data }}["{{ id }}"]);
+        make_line_chart("Lux", "lux_chart_{{ id }}", {{ sample_times|safe }}["{{ id }}"], {{ lux_data }}["{{ id }}"]);
+        make_line_chart("Visible Spectrum Light",  "visible_chart_{{ id }}", {{ sample_times|safe }}["{{ id }}"], {{ visible_data }}["{{ id }}"]);
+        make_line_chart("IR Spectrum Light", "ir_chart_{{ id }}", {{ sample_times|safe }}["{{ id }}"], {{ ir_data }}["{{ id }}"]);
+        make_line_chart("Full Spectrum Light", "full_chart_{{ id }}", {{ sample_times|safe }}["{{ id }}"], {{ full_data }}["{{ id }}"]);
+    {% endfor %}
+{% endblock %}
+</script>
+
+{% block content %}
+    {% for id in id_list %}
+    <div class="graph_9x9">
+        <div class="container my-3"> <!-- my-3 is margin y for spacing -->
+            <div class='row'>
+                <div class='col-md-12'>
+                    <h1 class='display-4'>Sensor {{ id }} Graphs</h1> 
+                </div>
+            </div>
+            <div class='row top_bot_margin'>
+                <div class='col-md-4'>
+                    <h5>Soil Temperature <span class="badge badge-secondary">Sensor {{ id }}</span></h5>
+                    <canvas id="temp_soil_chart_{{ id }}" width="600" height="400"></canvas>
+                </div>
+                <div class='col-md-4'>
+                    <h5>Room Temperature <span class="badge badge-secondary">Sensor {{ id }}</span></h5>
+                    <canvas id="temp_room_chart_{{ id }}" width="600" height="400"></canvas>
+                </div>
+                <div class='col-md-4'>
+                    <h5>Humidity <span class="badge badge-secondary">Sensor {{ id }}</span></h5>
+                    <canvas id="humidity_chart_{{ id }}" width="600" height="400"></canvas>
+                </div>
+            </div>
+            <div class='row top_bot_margin'>
+                <div class='col-md-4'>
+                    <h5>Heat Index <span class="badge badge-secondary">Sensor {{ id }}</span></h5>
+                    <canvas id="heat_index_chart_{{ id }}" width="600" height="400"></canvas>
+                </div>
+                <div class='col-md-4'>
+                    <h5>Moisture <span class="badge badge-secondary">Sensor {{ id }}</span></h5>
+                    <canvas id="moisture_chart_{{ id }}" width="600" height="400"></canvas>
+                </div>
+                <div class='col-md-4'>
+                    <h5>Lux <span class="badge badge-secondary">Sensor {{ id }}</span></h5>
+                    <canvas id="lux_chart_{{ id }}" width="600" height="400"></canvas>
+                </div>
+            </div>
+            <div class='row top_bot_margin'>
+                <div class='col-md-4'>
+                    <h5>Visible Spectrum Light <span class="badge badge-secondary">Sensor {{ id }}</span></h5>
+                    <canvas id="visible_chart_{{ id }}" width="600" height="400"></canvas>
+                </div>
+                <div class='col-md-4'>
+                    <h5>IR Spectrum Light <span class="badge badge-secondary">Sensor {{ id }}</span></h5>
+                    <canvas id="ir_chart_{{ id }}" width="600" height="400"></canvas>
+                </div>
+                <div class='col-md-4'>
+                    <h5>Full Spectrum Light <span class="badge badge-secondary">Sensor {{ id }}</span></h5>
+                    <canvas id="full_chart_{{ id }}" width="600" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

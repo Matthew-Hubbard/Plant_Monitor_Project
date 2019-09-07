@@ -18,7 +18,9 @@ from django.urls import path, include
 from sensors import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.index, name='home'),
     path('sensors/', include('sensors.urls')),
+    path('graphs/', views.graphs, name='graphs'),
+    path('table/', views.table, name='table'),
     path('admin/', admin.site.urls),
 ]

@@ -2,8 +2,17 @@
 
 {% load static %}
 
+<script>
+{% block jquery_nav %}
+    $(".nav a").on("click", function(){
+        $(".nav").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+    });
+{% endblock %}
+</script>
+
 {% block mynavbar %}
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark">
       <img class = "leaf_logo" src="{% static 'images/leaf.svg' %}" alt="Leaf Logo">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -12,24 +21,42 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
+          {% comment %} <li class="nav-item">
             <a class="nav-link" href="#">Link</a>
+          </li> {% endcomment %}
+          <li class = "nav-item">
+            <a class="nav-link" href="{% url 'graphs' %}">Graphs <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown
+                Tables
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
+                <a class="dropdown-item" href="#">All</a>
+                <div class="dropdown-divider"></div>
+                {% for id in id_list %}
+                <a class="dropdown-item" href="#">Sensor {{ id }}</a>
+                {% endfor %}
             </div>
           </li>
+          {% comment %} <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Help
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li> {% endcomment %}
           <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
+                <a class="nav-link" href="#">Help </a>
+          </li>
+          <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
@@ -40,9 +67,10 @@
     </nav> 
 {% endblock %}
 
+
 {% block footer %}
     <div style="text-align: center">
-        <a>Icons made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></a>
+        {% comment %} <a>Icons made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></a> {% endcomment %}
         <address>
             Author : Matthew R. Hubbard<br>
             Email : MatthewHubbard39@gmail.com 

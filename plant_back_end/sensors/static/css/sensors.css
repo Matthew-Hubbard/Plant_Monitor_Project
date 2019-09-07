@@ -11,12 +11,6 @@ table, th, td {
   border: 1px solid black;
 }
 
-.top_bot_margin {
-  margin-top: 1.5%;
-  margin-bottom: 1.25%;
-}
-
-
 /* @media (max-width: 575.98px) {
   .graph_9x9 {
     background: #E8F3F1;
@@ -33,4 +27,8 @@ table, th, td {
 .leaf_logo {
   height: 40px;
   width: 40px;
+}
+
+.navbar {
+  background: #545479;
 }
