@@ -1,4 +1,8 @@
 # Wireless Plant Monitoring
+
+### Demo
+![Demo](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/Pictures/Demo1.gif)
+
 ### About
 **End goal:** To host a website that will track plant data through wireless sensors and tell you when they need watering.
 
