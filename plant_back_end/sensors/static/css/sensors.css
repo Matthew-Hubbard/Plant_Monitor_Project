@@ -1,6 +1,7 @@
-body {
-  /* background-color: lightblue; */
-}
+ body {
+  /* background-color: #41B3A3; */
+  background-color: #7EC2AD;
+} 
 
 h1, h2, h3, h4, h5, h6 {
   text-align: center;
@@ -8,4 +9,28 @@ h1, h2, h3, h4, h5, h6 {
 
 table, th, td {
   border: 1px solid black;
+}
+
+.top_bot_margin {
+  margin-top: 1.5%;
+  margin-bottom: 1.25%;
+}
+
+
+/* @media (max-width: 575.98px) {
+  .graph_9x9 {
+    background: #E8F3F1;
+    border-radius: 0%;
+  }
+} */
+
+.graph_9x9 {
+  /* background: #F5F5F5; */
+  background: #E8F3F1;
+  border-radius: 1.5%;
+}
+
+.leaf_logo {
+  height: 40px;
+  width: 40px;
 }

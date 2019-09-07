@@ -11,15 +11,26 @@
     <link rel="stylesheet" href="{% static 'css/sensors.css' %}">
   </head>
   <body>
-    <div class='container'>
+
+    {% block mynavbar %}
+    {% endblock mynavbar %}
+
+    <div class='container main_content'>
     {% block content %}
     {% endblock content %}
     </div>
+
+    <footer>
+    {% block footer %}
+    {% endblock footer %}
+    </footer>
+
     {% include 'base/js.html' %}
     <script>
     $(document).ready(function(){
       {% block jquery %}{% endblock %}
     })
     </script>
+
   </body>
 </html

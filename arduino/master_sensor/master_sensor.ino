@@ -51,7 +51,7 @@ float temp_soil=0;
 
 Adafruit_TSL2591 tsl = Adafruit_TSL2591(2591); // pass in a number for the sensor identifier (for your use later)
 
-int sensor_id = 0;
+int sensor_id = 3;
 
 // Functions
 float get_moisture();
