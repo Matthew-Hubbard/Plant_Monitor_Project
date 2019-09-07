@@ -12,28 +12,11 @@
                 datasets: [{
                     label: chart_name,
                     fill: false,
-                    {% comment %} backgroundColor: "#0b8028", {% endcomment %}
-                    pointRadius: 2,
-                    pointBackgroundColor: "#65a356",
-                    borderColor: "#064f0f",
+                    pointRadius: 1.5,
+                    pointBackgroundColor: "#212529",
+                    borderColor: "#2E4857",
                     data: data_list,
-                    {% comment %} backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ], {% endcomment %}
-                    borderWidth: 1
+                    borderWidth: 1,
                 }]
             },
             options: {
@@ -44,7 +27,7 @@
                         }
                     }],
                     xAxes: [{
-                    type: 'time'
+                        type: 'time'
                     }]
                 }
             }
@@ -74,7 +57,7 @@
                     <h1 class='display-4'>Sensor {{ id }} Graphs</h1> 
                 </div>
             </div>
-            <div class='row top_bot_margin'>
+            <div class='row'>
                 <div class='col-md-4'>
                     <h5>Soil Temperature <span class="badge badge-secondary">Sensor {{ id }}</span></h5>
                     <canvas id="temp_soil_chart_{{ id }}" width="600" height="400"></canvas>
@@ -88,7 +71,7 @@
                     <canvas id="humidity_chart_{{ id }}" width="600" height="400"></canvas>
                 </div>
             </div>
-            <div class='row top_bot_margin'>
+            <div class='row'>
                 <div class='col-md-4'>
                     <h5>Heat Index <span class="badge badge-secondary">Sensor {{ id }}</span></h5>
                     <canvas id="heat_index_chart_{{ id }}" width="600" height="400"></canvas>
@@ -102,7 +85,7 @@
                     <canvas id="lux_chart_{{ id }}" width="600" height="400"></canvas>
                 </div>
             </div>
-            <div class='row top_bot_margin'>
+            <div class='row'>
                 <div class='col-md-4'>
                     <h5>Visible Spectrum Light <span class="badge badge-secondary">Sensor {{ id }}</span></h5>
                     <canvas id="visible_chart_{{ id }}" width="600" height="400"></canvas>

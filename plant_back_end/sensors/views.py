@@ -14,8 +14,20 @@ from django.db.models import Max
 # Create your views here.
 
 def index(request):
-    id_list = list(Sensor_data.objects.values_list('sensor_id', flat=True).distinct())
-    context = {'id_list': id_list}
+    context = get_context(1)
+
+    moisture_percent = {}
+    dry = 666
+    wet = 250
+    raw = 0
+    for id in context["id_list"]:
+        raw = context["moisture_data"][id][0]
+        adjusted = (((dry - raw)/(dry - wet)) * 100)
+        if(adjusted < 0):
+            adjusted = 0
+        moisture_percent[id] = adjusted
+    context["moisture_percent"] = moisture_percent
+
     return render(request, 'sensors/index.html', context)
 
 def graphs(request):

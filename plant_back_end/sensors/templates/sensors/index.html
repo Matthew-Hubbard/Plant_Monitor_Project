@@ -1,5 +1,79 @@
 {% extends 'sensors/navbar.html' %}
+{% load static %}
+
+<script>
+    {% block jquery %}
+
+    {% for id in id_list %}
+        {% comment %} Set the water drop loading bar to the moisture percentage for each sensor {% endcomment %}
+        $("#water_bar_{{ id }}").attr("data-value", {{ moisture_percent }}['{{ id }}']);
+    {% endfor %}
+
+    {% for id in id_list %}
+        {% comment %} Set the temp loading bar to the room temp for each sensor {% endcomment %}
+        $("#temp_bar_{{ id }}").attr("data-value", {{ temp_room_data }}['{{ id }}']);
+    {% endfor %}
+
+    {% for id in id_list %}
+        {% comment %} Set the humidity loading bar to the room temp for each sensor {% endcomment %}
+        $("#humidity_bar_{{ id }}").attr("data-value", {{ humidity_data }}['{{ id }}']);
+    {% endfor %}
+
+    {% for id in id_list %}
+        {% comment %} Set the humidity loading bar to the room temp for each sensor {% endcomment %}
+        $("#lux_bar_{{ id }}").attr("data-value", {{ lux_data }}['{{ id }}']);
+    {% endfor %}
+
+    {% endblock %}
+</script>
 
 {% block content %}
-    <h1>Index.html</h1>
+    <div class = "graph_9x9">
+        <div class="container my-3"> <!-- my-3 is margin y for spacing -->
+
+            <div class='row'>
+                <div class='col-md-12'>
+                    <h1 class='display-3'>Status</h1> 
+                </div>
+            </div>
+
+            <div class='row'>
+            {% for id in id_list %}
+                <div class = 'col-md-3 my-3 lux_bars'>
+                    <h6>Sensor {{ id }}</h6>
+                    <div id="lux_bar_{{ id }}" class="center-block ldBar label-center" data-type="fill" data-img="{% static 'images/sun.svg' %}" data-precision="0.1" data-max = "600" data-value="50"></div>
+                </div>
+            {% endfor %}
+            </div>
+
+            {% comment %} Water drops to represent moisture (4 per row) {% endcomment %}
+            <div class='row'>
+            {% for id in id_list %}
+                <div class = 'col-md-3 my-3'>
+                    <h6>Sensor {{ id }}</h6>
+                    <div id="water_bar_{{ id }}" data-type="fill" data-img="{% static 'images/drop.svg' %}" data-precision="0.1" class="center-block ldBar label-center" data-value="50"></div>
+                </div>
+            {% endfor %}
+            </div>
+
+            <div class='row'>
+            {% for id in id_list %}
+                <div class = 'col-md-3 my-3 temp_bars'>
+                    <h6>Sensor {{ id }}</h6>
+                    <div id="temp_bar_{{ id }}" class="center-block ldBar label-center" data-type="fill" data-img="{% static 'images/thermometer.svg' %}" data-precision="0.1" data-value="50"></div>
+                </div>
+            {% endfor %}
+            </div>
+
+            <div class='row'>
+            {% for id in id_list %}
+                <div class = 'col-md-3 my-3'>
+                    <h6>Sensor {{ id }}</h6>
+                    <div id="humidity_bar_{{ id }}" class="center-block ldBar label-center" data-type="fill" data-img="{% static 'images/humidity.svg' %}" data-precision="0.1" data-value="50"></div>
+                </div>
+            {% endfor %}
+            </div>
+
+        </div>
+    </div>
 {% endblock %}

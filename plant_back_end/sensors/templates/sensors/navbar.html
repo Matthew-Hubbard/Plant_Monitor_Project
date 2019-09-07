@@ -4,8 +4,8 @@
 
 <script>
 {% block jquery_nav %}
-    $(".nav a").on("click", function(){
-        $(".nav").find(".active").removeClass("active");
+    $(".nav-link a").on("click", function(){
+        $(".nav-link").find(".active").removeClass("active");
         $(this).parent().addClass("active");
     });
 {% endblock %}
@@ -69,11 +69,25 @@
 
 
 {% block footer %}
-    <div style="text-align: center">
-        {% comment %} <a>Icons made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></a> {% endcomment %}
-        <address>
-            Author : Matthew R. Hubbard<br>
-            Email : MatthewHubbard39@gmail.com 
-        </address>
+    <div class="graph_9x9">
+        <div class="container my-3"> <!-- my-3 is margin y for spacing -->
+            <div class='row'>
+                <div class='col-md-12'>
+                    {% comment %} <a>Leaf logo made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></a> {% endcomment %}
+                    {% comment %} <a>Background pattern made by <a href="http://buysellgraphic.com/" title="buysellgraphic">BSGStudio</a> from <a href="https://all-free-download.com/free-vector/download/plant-pattern-leaf-pot-icons-colored-design_6840621.html" title="all-free-download">all-free-download</a></a> {% endcomment %}
+                    {% comment %} (for drop.svg) <div>Icons made by <a href="https://www.flaticon.com/authors/pixel-buddha" title="Pixel Buddha">Pixel Buddha</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div> {% endcomment %}
+
+                    {% comment %} (for watering_plants.svg) <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div> {% endcomment %}
+                    {% comment %} (for Thermometer.svg) <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div> {% endcomment %}
+                    {% comment %} (for humidity.svg) <div>Icons made by <a href="https://www.flaticon.com/authors/those-icons" title="Those Icons">Those Icons</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div> {% endcomment %}
+                    {% comment %} (for humidity2.svg) <div>Icons made by <a href="https://www.flaticon.com/authors/those-icons" title="Those Icons">Those Icons</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div> {% endcomment %}
+
+                    {% comment %} <address>  {% endcomment %}
+                        Author : Matthew R. Hubbard<br>
+                        Email : MatthewHubbard39@gmail.com 
+                    {% comment %} </address> {% endcomment %}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
