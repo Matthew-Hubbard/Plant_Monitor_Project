@@ -4,24 +4,61 @@
 <script>
     {% block jquery %}
 
+    {% comment %} Enable all tooptips {% endcomment %}
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    }) 
+
+    var moisture = 100;
     {% for id in id_list %}
         {% comment %} Set the water drop loading bar to the moisture percentage for each sensor {% endcomment %}
-        $("#water_bar_{{ id }}").attr("data-value", {{ moisture_percent }}['{{ id }}']);
+        moisture = {{ moisture_percent }}['{{ id }}'];
+        $("#water_bar_{{ id }}").attr("data-value", moisture);
+        if(moisture < 20){
+            $("#tooltip_water_{{ id }}").attr("title", "Water me!");
+        } else {
+            $("#tooltip_water_{{ id }}").attr("title", "Looks good!");
+        }
     {% endfor %}
 
+    var temp = 80;
     {% for id in id_list %}
         {% comment %} Set the temp loading bar to the room temp for each sensor {% endcomment %}
-        $("#temp_bar_{{ id }}").attr("data-value", {{ temp_room_data }}['{{ id }}']);
+        temp = {{ temp_room_data }}['{{ id }}'];
+        $("#temp_bar_{{ id }}").attr("data-value", temp);
+        if(temp < 60){
+            $("#tooltip_temp_{{ id }}").attr("title", "Little chilly in here!");
+        } else if(temp > 90){
+            $("#tooltip_temp_{{ id }}").attr("title", "Turn down the heat!");
+        } else{
+            $("#tooltip_temp_{{ id }}").attr("title", "Looks good!");
+        }
     {% endfor %}
 
+    var humidity = 50;
     {% for id in id_list %}
-        {% comment %} Set the humidity loading bar to the room temp for each sensor {% endcomment %}
-        $("#humidity_bar_{{ id }}").attr("data-value", {{ humidity_data }}['{{ id }}']);
+        {% comment %} Set the humidity loading bar to the humidity for each sensor {% endcomment %}
+        humidity = {{ humidity_data }}['{{ id }}'];
+        $("#humidity_bar_{{ id }}").attr("data-value", humidity);
+        if(humidity < 20){
+            $("#tooltip_humidity_{{ id }}").attr("title", "It's dry in here!");
+        } else if (humidity > 80){
+            $("#tooltip_humidity_{{ id }}").attr("title", "It's really humid!");
+        } else {
+            $("#tooltip_humidity_{{ id }}").attr("title", "Looks good!");
+        }
     {% endfor %}
 
+    var lux = 666;
     {% for id in id_list %}
-        {% comment %} Set the humidity loading bar to the room temp for each sensor {% endcomment %}
-        $("#lux_bar_{{ id }}").attr("data-value", {{ lux_data }}['{{ id }}']);
+        {% comment %} Set the lux loading bar to the lux for each sensor {% endcomment %}
+        lux = {{ lux_data }}['{{ id }}'];
+        $("#lux_bar_{{ id }}").attr("data-value", lux);
+        if(lux < 150){
+            $("#tooltip_lux_{{ id }}").attr("title", "I need more light!");
+        } else {
+            $("#tooltip_lux_{{ id }}").attr("title", "Looks good!");
+        }
     {% endfor %}
 
     {% endblock %}
@@ -36,10 +73,18 @@
                     <h1 class='display-3'>Status</h1> 
                 </div>
             </div>
+ 
+            {% comment %} <div class = 'row'>
+                <div class = 'col-md-12'>
+                    <div class="alert alert-danger text-center" role="alert">
+                        Sensor 0 and Sensor 2 need water!
+                    </div>
+                </div>
+            </div> {% endcomment %}
 
             <div class='row'>
             {% for id in id_list %}
-                <div class = 'col-md-3 my-3 lux_bars'>
+                <div id="tooltip_lux_{{ id }}" class = 'col-md-3 my-3 lux_bars btn' data-toggle="tooltip" data-placement="top" title="Looks good!">
                     <h6>Sensor {{ id }}</h6>
                     <div id="lux_bar_{{ id }}" class="center-block ldBar label-center" data-type="fill" data-img="{% static 'images/sun.svg' %}" data-precision="0.1" data-max = "600" data-value="50"></div>
                 </div>
@@ -49,7 +94,7 @@
             {% comment %} Water drops to represent moisture (4 per row) {% endcomment %}
             <div class='row'>
             {% for id in id_list %}
-                <div class = 'col-md-3 my-3'>
+                <div id="tooltip_water_{{ id }}" class='col-md-3 my-3 water_bars btn' data-toggle="tooltip" data-placement="top" title="">
                     <h6>Sensor {{ id }}</h6>
                     <div id="water_bar_{{ id }}" data-type="fill" data-img="{% static 'images/drop.svg' %}" data-precision="0.1" class="center-block ldBar label-center" data-value="50"></div>
                 </div>
@@ -58,7 +103,7 @@
 
             <div class='row'>
             {% for id in id_list %}
-                <div class = 'col-md-3 my-3 temp_bars'>
+                <div id="tooltip_temp_{{ id }}" class='col-md-3 my-3 temp_bars btn' data-toggle="tooltip" data-placement="top" title="Looks good!">
                     <h6>Sensor {{ id }}</h6>
                     <div id="temp_bar_{{ id }}" class="center-block ldBar label-center" data-type="fill" data-img="{% static 'images/thermometer.svg' %}" data-precision="0.1" data-value="50"></div>
                 </div>
@@ -67,12 +112,13 @@
 
             <div class='row'>
             {% for id in id_list %}
-                <div class = 'col-md-3 my-3'>
+                <div id="tooltip_humidity_{{ id }}" class = 'col-md-3 my-3 humidity_bars btn' data-toggle="tooltip" data-placement="top" title="Looks good!">
                     <h6>Sensor {{ id }}</h6>
                     <div id="humidity_bar_{{ id }}" class="center-block ldBar label-center" data-type="fill" data-img="{% static 'images/humidity.svg' %}" data-precision="0.1" data-value="50"></div>
                 </div>
             {% endfor %}
             </div>
+
 
         </div>
     </div>
