@@ -1,5 +1,8 @@
 <h1 align="center" font-weight="bold">Wireless Plant Monitoring</h1>
 
+### Demo
+![Demo](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/Pictures/Demo1.gif)
+
 ### About
 **End goal:** To host a website that will track plant data through wireless sensors and tell you when they need watering.
 
@@ -13,9 +16,6 @@ Each sensor module will transmit data to the master module via 2.4Ghz RF. The ma
 - Sunlight Luminosity (Lux)
 - Humidity
 - Soil Moisture
-
-### Demo
-![Demo](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/Pictures/Demo1.gif)
 
 ### Master Sensor With Wifi
 ![Master Sensor With Wifi](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/master_prototype_1.jpg)
