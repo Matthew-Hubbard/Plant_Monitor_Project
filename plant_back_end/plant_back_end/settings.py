@@ -120,3 +120,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = '/home/MatthewHubbard/Plant_Monitor_Project/plant_back_end/static' # for deploy on python anywhere
+
+# To config for python anywhere deploy watch this video:
+# https://www.youtube.com/watch?v=Y4c4ickks2A
