@@ -77,5 +77,18 @@ footer {
   content: " lx";
 }
 
+#notifications_div {
+  position: fixed;
+  right : 15px;
+  /* top: 71; */
+  bottom: 15px;
+  /* right: 0; */
+}
+
+.alert {
+  margin: 6;
+  width: 300px;
+}
+
 /* .red-tooltip + .tooltip > .tooltip-inner {background-color: #f00;}
 .red-tooltip + .tooltip > .tooltip-arrow { border-bottom-color:#f00; } */

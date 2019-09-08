@@ -15,16 +15,20 @@
     {% block mynavbar %}
     {% endblock mynavbar %}
 
+
     <div class='container main_content'>
-    {% block content %}
-    {% endblock content %}
+      {% block content %}
+      {% endblock content %}
+    </div>
+
+    <div id="notifications_div">
     </div>
 
     <div class='container'>
-    <footer>
-    {% block footer %}
-    {% endblock footer %}
-    </footer>
+      <footer>
+        {% block footer %}
+        {% endblock footer %}
+      </footer>
     </div>
 
     {% include 'base/js.html' %}
