@@ -121,7 +121,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/home/MatthewHubbard/Plant_Monitor_Project/plant_back_end/static' # for deploy on python anywhere
+STATIC_ROOT = 'C:/Users/Matthew/Documents/Plant_Project/Plant_Monitor_Project/plant_back_end/static' # for deploy on python anywhere
 
 # To config for python anywhere deploy watch this video:
 # https://www.youtube.com/watch?v=Y4c4ickks2A

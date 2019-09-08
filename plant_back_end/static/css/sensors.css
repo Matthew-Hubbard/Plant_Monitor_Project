@@ -1,0 +1,81 @@
+body {
+  /* background-color: #41B3A3; */
+  background-color: #7EC2AD;
+  /* background-image: url('../images/leafs_bg.jpg'); */
+  background-image: url('../images/plants_pattern.jpg');
+  background-size: 50%;
+} 
+
+h1, h2, h3, h4, h5, h6 {
+  text-align: center;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
+/* @media (max-width: 575.98px) {
+  .graph_9x9 {
+    background: #E8F3F1;
+    border-radius: 0%;
+  }
+} */
+
+.graph_9x9 {
+  /* background: #F5F5F5; */
+  /* background: #E8F3F1; */
+  /* background: #F1F4CD; */
+  /* background: #FAFBE9; */
+  /* background: #F0DEB4; */
+  /* background:rgba(250, 251, 233, 0.985); */
+  /* background: rgb(240,222,180); */
+  /* background: rgb(250, 240, 190); */
+  /* background: rgb(248, 240, 222); */
+  /* background: #98C0C5; */
+  /* background: #FFF7D6; */
+  /* background-image: url('../images/paper_fibers.png'); */
+  /* background-image: url('../images/lightpaperfibers.png'); */
+  background-image: url('../images/natural_paper.png');
+  border-radius: 12px;
+}
+
+footer {
+  text-align: center;
+}
+
+.leaf_logo {
+  height: 40px;
+  width: 40px;
+}
+
+.navbar {
+  /* background: #545479; */
+  background: #2F4858;
+}
+
+.center-block {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  display: block;
+}
+
+.ldBar-label{
+  font-weight: bold;
+}
+
+.temp_bars .ldBar-label{
+  background: #E4E4E4;
+}
+
+.temp_bars .ldBar-label::after{
+  content: "℉";
+}
+
+.lux_bars .ldBar-label::after{
+  content: " lx";
+}
+
+/* .red-tooltip + .tooltip > .tooltip-inner {background-color: #f00;}
+.red-tooltip + .tooltip > .tooltip-arrow { border-bottom-color:#f00; } */
