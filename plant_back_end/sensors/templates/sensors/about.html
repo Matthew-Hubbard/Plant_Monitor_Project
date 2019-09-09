@@ -1,0 +1,35 @@
+{% extends 'sensors/navbar.html' %}
+
+{% load static %}
+
+<script>
+{% block jquery %}
+{% endblock %}
+</script>
+
+{% block content %}
+    <div class="graph_9x9">
+        <div class="container my-3"> <!-- my-3 is margin y for spacing -->
+            <div class='row'>
+                <div class='col-md-12'>
+                    <h1 class='display-4'>About</h1> 
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-md-3 my-3'>
+                    <img class="center-block" src="{% static 'images/Linked_in.jpg' %}"></img>
+                </div>
+                <div class='col-md-9 my-3'>
+                    <span class="paragraph_text">
+                        <strong>What?</strong><br>
+                        This website tracks the status of my house plants. It records temperature, humidity, soil moisture, and light.<br> 
+                        <strong>Why?</strong><br>
+                        I love a good challenge and this project gave me the opportunity to showcase my skills as a software engineer.<br>
+                        <strong>Where's the source code?</strong><br>
+                        Right here! <a href="https://github.com/Matthew-Hubbard/Plant_Monitor_Project"> https://github.com/Matthew-Hubbard/Plant_Monitor_Project</a><br>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

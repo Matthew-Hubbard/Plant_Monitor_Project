@@ -1,38 +1,55 @@
-{% extends 'sensors/base.html' %}
+{% extends 'sensors/navbar.html' %}
 
 {% block content %}
-  {% if data_list %}
-    <table>
-      <tr>
-        <th>Sensor ID</th>
-        <th>Timestamp</th>
-        <th>Room Temp</th>
-        <th>Soil Temp</th>
-        <th>Humidity</th>
-        <th>Heat Index</th>
-        <th>Moisture</th>
-        <th>Lux</th>
-        <th>Visible</th>
-        <th>IR</th>
-        <th>Full</th>
-      </tr>
-      {% for data in data_list %}
-        <tr>
-          <td>{{ data.sensor_id }}</td>
-          <td>{{ data.timestamp }}</td>
-          <td>{{ data.temp_room }}</td>
-          <td>{{ data.temp_soil }}</td>
-          <td>{{ data.humidity }}</td>
-          <td>{{ data.heat_index }}</td>
-          <td>{{ data.moisture }}</td>
-          <td>{{ data.lux }}</td>
-          <td>{{ data.visible }}</td>
-          <td>{{ data.ir }}</td>
-          <td>{{ data.full }}</td>
-        </tr>
-      {% endfor %}
-    </table>
-  {% else %}
-      <p>No data is available.</p>
-  {% endif %}
+  <div class="graph_9x9">
+    <div class="container my-3"> <!-- my-3 is margin y for spacing -->
+      <div class='row'>
+        <div class='col-md-12'>
+          <h1 class='display-4'>{{ title }}</h1> 
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-12'>
+          {% if data_list %}
+            <table class = "table table-light table-striped table-hover">
+              <thead class= "thead-dark">
+                <tr>
+                  <th scope="row">Sensor ID</th>
+                  <th scope="row">Timestamp</th>
+                  <th scope="row">Room Temp</th>
+                  <th scope="row">Soil Temp</th>
+                  <th scope="row">Humidity</th>
+                  <th scope="row">Heat Index</th>
+                  <th scope="row">Moisture</th>
+                  <th scope="row">Lux</th>
+                  <th scope="row">Visible</th>
+                  <th scope="row">IR</th>
+                  <th scope="row">Full</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for data in data_list %}
+                <tr>
+                  <td scope="col">{{ data.sensor_id }}</td>
+                  <td>{{ data.timestamp }}</td>
+                  <td>{{ data.temp_room }}</td>
+                  <td>{{ data.temp_soil }}</td>
+                  <td>{{ data.humidity }}</td>
+                  <td>{{ data.heat_index }}</td>
+                  <td>{{ data.moisture }}</td>
+                  <td>{{ data.lux }}</td>
+                  <td>{{ data.visible }}</td>
+                  <td>{{ data.ir }}</td>
+                  <td>{{ data.full }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+              <p>No data is available.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock content %}

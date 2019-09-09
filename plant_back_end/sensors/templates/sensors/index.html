@@ -8,7 +8,7 @@
     {% comment %} $('.toast').toast('show') {% endcomment %}
     
     function my_alert(message){
-        html_str = '<div class="alert alert-primary alert-dismissible fade show" role="alert">\
+        html_str = '<div class="alert alert-info alert-dismissible fade show" role="alert">\
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">\
         <span aria-hidden="true">&times;</span>\
         </button>'+ message + '</div>';
@@ -20,6 +20,8 @@
         $('[data-toggle="tooltip"]').tooltip()
     }) 
 
+    alert_message = "";
+
     var moisture = 100;
     {% for id in id_list %}
         {% comment %} Set the water drop loading bar to the moisture percentage for each sensor {% endcomment %}
@@ -27,7 +29,8 @@
         $("#water_bar_{{ id }}").attr("data-value", moisture);
         if(moisture < 20){
             $("#tooltip_water_{{ id }}").attr("title", "Water me!");
-            my_alert('<strong>Sensor {{ id }} needs water!</strong><br> (Moisture: ' + moisture.toFixed(1) + '%)');
+            //my_alert('<strong>Sensor {{ id }} needs water!</strong><br> (Moisture: ' + moisture.toFixed(1) + '%)');
+            alert_message += '<strong>Sensor {{ id }} needs water!</strong><br> (Moisture: ' + moisture.toFixed(1) + '%)<br>';
         } else {
             $("#tooltip_water_{{ id }}").attr("title", "Looks good!");
         }
@@ -40,10 +43,12 @@
         $("#temp_bar_{{ id }}").attr("data-value", temp);
         if(temp < 60){
             $("#tooltip_temp_{{ id }}").attr("title", "Little chilly in here!");
-            my_alert('<strong>Sensor {{ id }} is too cold!</strong><br>(Room temp: ' + temp + '℉)');
+            //my_alert('<strong>Sensor {{ id }} is too cold!</strong><br>(Room temp: ' + temp + '℉)');
+            alert_message += '<strong>Sensor {{ id }} is too cold!</strong><br>(Room temp: ' + temp + '℉)<br>';
         } else if(temp > 90){
             $("#tooltip_temp_{{ id }}").attr("title", "Turn down the heat!");
-            my_alert('<strong>Sensor {{ id }} is too hot!</strong><br>(Room temp: ' + temp + '℉)');
+            //my_alert('<strong>Sensor {{ id }} is too hot!</strong><br>(Room temp: ' + temp + '℉)');
+            alert_mesage += '<strong>Sensor {{ id }} is too hot!</strong><br>(Room temp: ' + temp + '℉)<br>';
         } else{
             $("#tooltip_temp_{{ id }}").attr("title", "Looks good!");
         }
@@ -56,10 +61,12 @@
         $("#humidity_bar_{{ id }}").attr("data-value", humidity);
         if(humidity < 20){
             $("#tooltip_humidity_{{ id }}").attr("title", "It's dry in here!");
-            my_alert('<strong>Sensor {{ id }} is too dry!</strong><br> (Humidity: ' + humidity + '℉)');
+            //my_alert('<strong>Sensor {{ id }} is too dry!</strong><br> (Humidity: ' + humidity + '℉)');
+            alert_message += '<strong>Sensor {{ id }} is too dry!</strong><br> (Humidity: ' + humidity + '℉)<br>';
         } else if (humidity > 80){
             $("#tooltip_humidity_{{ id }}").attr("title", "It's really humid!");
-            my_alert('<strong>Sensor {{ id }} is too wet!</strong><br> (Humidity: ' + humidity + '℉)');
+            //my_alert('<strong>Sensor {{ id }} is too wet!</strong><br> (Humidity: ' + humidity + '℉)');
+            alert_message += '<strong>Sensor {{ id }} is too wet!</strong><br> (Humidity: ' + humidity + '℉)<br>';
         } else {
             $("#tooltip_humidity_{{ id }}").attr("title", "Looks good!");
         }
@@ -72,11 +79,14 @@
         $("#lux_bar_{{ id }}").attr("data-value", lux);
         if(lux < 150){
             $("#tooltip_lux_{{ id }}").attr("title", "I need more light!");
-            my_alert('<strong>Sensor {{ id }} needs light!</strong><br> (lux: ' + lux + '℉)');
+            //my_alert('<strong>Sensor {{ id }} needs light!</strong><br> (lux: ' + lux + '℉)');
+            alert_message += '<strong>Sensor {{ id }} needs light!</strong><br> (lux: ' + lux + '℉)<br>';
         } else {
             $("#tooltip_lux_{{ id }}").attr("title", "Looks good!");
         }
     {% endfor %}
+
+    my_alert(alert_message);
 
     {% endblock %}
 </script>

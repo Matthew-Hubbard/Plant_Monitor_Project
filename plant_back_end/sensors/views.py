@@ -27,27 +27,41 @@ def index(request):
             adjusted = 0
         moisture_percent[id] = adjusted
     context["moisture_percent"] = moisture_percent
+    context["home"] = "active"
 
     return render(request, 'sensors/index.html', context)
 
 def graphs(request):
     context = get_context(50)
+    context["graphs"] = "active"
     return render(request, 'sensors/graphs.html', context)
 
 def table(request):
 #    return HttpResponse("Hello, world. You're at the sensors index.")
+    id_list = list(Sensor_data.objects.values_list('sensor_id', flat=True).distinct())
     data_list = Sensor_data.objects.order_by('-timestamp')[:50]
-    context = {'data_list': data_list}
+    context = {'data_list': data_list, 'id_list': id_list, 'title': "All Sensors"}
+    context["tables"] = "active"
     return render(request, 'sensors/table.html', context)
 
 def table_sensor(request, sensor_id):
+    id_list = list(Sensor_data.objects.values_list('sensor_id', flat=True).distinct())
     data_list = Sensor_data.objects.filter(sensor_id=sensor_id).order_by('-timestamp')[:50]
-    context = {'data_list': data_list}
+    context = {'id_list': id_list, 'data_list': data_list, 'title': "Sensor " + str(sensor_id)}
     return render(request, 'sensors/table.html', context)
 
 def chart(request):
     return HttpResponse("at sensor/chart")
 
+def about(request):
+    id_list = list(Sensor_data.objects.values_list('sensor_id', flat=True).distinct())
+    context = {'id_list': id_list, 'about': "active"}
+    return render(request, 'sensors/about.html', context)
+
+def help(request):
+    id_list = list(Sensor_data.objects.values_list('sensor_id', flat=True).distinct())
+    context = {'id_list': id_list, 'help': "active"}
+    return render(request, 'sensors/help.html', context)
 
 @csrf_exempt
 def send_data(request):
