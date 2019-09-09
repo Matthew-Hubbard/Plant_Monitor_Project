@@ -2,53 +2,55 @@
 
 {% load static %}
 
-
 {% block mynavbar %}
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark">
-      <a href="{% url 'home' %}"><img class = "leaf_logo" src="{% static 'images/leaf.svg' %}" alt="Leaf Logo"></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
+
           <li class="nav-item {{ home }}">
-            <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+            <a id = "home_nav_text" class="nav-link" href="{% url 'home' %}">
+              <img id="home_nav_icon" class = "nav_icon img-responsive {{ home }}" src="{% static 'images/home_icon_white.svg' %}" alt="Home Icon">
+              Home
+            <span class="sr-only">(current)</span></a>
           </li>
-          {% comment %} <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li> {% endcomment %}
+
           <li class = "nav-item {{ graphs }}">
-            <a class="nav-link" href="{% url 'graphs' %}">Graphs <span class="sr-only">(current)</span></a>
+            <a id = "graph_nav_text" class="nav-link" href="{% url 'graphs' %}">
+              <img id="graph_nav_icon" class = "nav_icon img-responsive {{ graphs }}" src="{% static 'images/graph_icon_white.svg' %}" alt="Graphs icon">
+              &nbsp;Graphs
+            <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item dropdown {{ tables }}">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Tables
+
+          <li id="table_nav_li" class="nav-item dropdown {{ tables }}">
+            <a id="table_nav_text" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img id="table_nav_icon" class = "nav_icon img-responsive {{ tables }}" src="{% static 'images/spreadsheet_icon_white.svg' %}" alt="Table nav icon">
+              &nbsp;Tables
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{% url 'table' %}">All</a>
-                <div class="dropdown-divider"></div>
-                {% for id in id_list %}
-                    <a class="dropdown-item" href="{% url 'table_id' sensor_id=id %}">Sensor {{ id }}</a>
-                {% endfor %}
+              <a class="dropdown-item" href="{% url 'table' %}">All</a>
+              <div class="dropdown-divider"></div>
+              {% for id in id_list %}
+                  <a class="dropdown-item" href="{% url 'table_id' sensor_id=id %}">Sensor {{ id }}</a>
+              {% endfor %}
             </div>
           </li>
-          {% comment %} <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Help
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li> {% endcomment %}
+
           <li class="nav-item {{ help }}">
-                <a class="nav-link" href="{% url 'help' %}">Help </a>
+                <a id= "setup_nav_text" class="nav-link" href="{% url 'help' %}">
+                  <img id="setup_nav_icon" class = "nav_icon img-responsive {{ help }}" src="{% static 'images/setup_icon_white.svg' %}" alt="Setup Icon">
+                  &nbsp;Setup
+                </a>
           </li>
+
           <li class="nav-item {{ about }}">
-                <a class="nav-link" href="{% url 'about' %}">About</a>
+                <a id="about_nav_text" class="nav-link" href="{% url 'about' %}">
+                  <img id="about_nav_icon" class = "nav_icon img-responsive {{ about }}" src="{% static 'images/about_icon_white.svg' %}" alt="About Icon">
+                  &nbsp;About
+                </a>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
@@ -72,7 +74,8 @@
                     {% comment %} (for watering_plants.svg) <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div> {% endcomment %}
                     {% comment %} (for Thermometer.svg) <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div> {% endcomment %}
                     {% comment %} (for humidity.svg) <div>Icons made by <a href="https://www.flaticon.com/authors/those-icons" title="Those Icons">Those Icons</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div> {% endcomment %}
-                    {% comment %} (for humidity2.svg) <div>Icons made by <a href="https://www.flaticon.com/authors/those-icons" title="Those Icons">Those Icons</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div> {% endcomment %}
+                    {% comment %} (for graph_icon.svg) <div>Icons made by <a href="https://www.flaticon.com/authors/mynamepong" title="mynamepong">mynamepong</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div> {% endcomment %}
+                    {% comment %} (for home_icon.svg) <div>Icons made by <a href="https://www.flaticon.com/authors/monkik" title="monkik">monkik</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div> {% endcomment %}
 
                     {% comment %} <address>  {% endcomment %}
                         Author : Matthew R. Hubbard<br>
@@ -86,11 +89,31 @@
 
 <script>
 {% block jquery_nav %}
-  {% comment %} console.log("Test.");
-  $(".nav-item a").on('click', function(){
-      console.log("Clicked Nav.");
-      $(".nav-link").find(".active").removeClass("active");
-      $(this).parent().addClass("active");
-  }); {% endcomment %}
+    //Make icon active when clicking to open table dropdown
+    $("#table_nav_text").click(function(){
+      $("#table_nav_icon").addClass("active");
+    });
+
+    $(document).mouseup(function(e) 
+    {
+        var container = $(".nav-item");
+        var icon;
+        if(container.attr("id") == "table_nav_icon"){
+          icon = $("#table_nav_icon");
+        }
+
+        // if the target of the click isn't the container nor a descendant of the container
+        //if (!container.is(e.target) && container.has(e.target).length === 0) 
+
+        // if the target of the click isn't the container 
+        if (!container.is(e.target)) 
+        {
+          if(container.hasClass('active') == false)
+          {
+            icon.removeClass("active");
+          }
+        }
+    });
+
 {% endblock %}
 </script>

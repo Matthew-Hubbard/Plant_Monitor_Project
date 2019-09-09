@@ -48,6 +48,7 @@ def table_sensor(request, sensor_id):
     id_list = list(Sensor_data.objects.values_list('sensor_id', flat=True).distinct())
     data_list = Sensor_data.objects.filter(sensor_id=sensor_id).order_by('-timestamp')[:50]
     context = {'id_list': id_list, 'data_list': data_list, 'title': "Sensor " + str(sensor_id)}
+    context["tables"] = "active"
     return render(request, 'sensors/table.html', context)
 
 def chart(request):
