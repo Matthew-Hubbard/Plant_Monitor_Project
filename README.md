@@ -4,8 +4,8 @@
 
 ## [Click here to check out the website!](http://matthewhubbard.pythonanywhere.com "Plant Monitor Website")
 
-### System Diagram
-<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/Flow_Diagram.png" height="100%" width="100%">
+<h3 align="center">System Diagram</h3>
+<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/Flow_Diagram.png" height="75%" width="75%">
 
 ### Technology Stack
 
