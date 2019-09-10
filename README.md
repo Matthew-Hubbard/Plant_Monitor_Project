@@ -5,11 +5,11 @@
 
 I'm developing a system of Arduinos with sensors to monitor plants connected over RF to a master module. The master module has an ESP8266 WiFi chip that uploads data to a Django web server via HTTP POST request.
 
+### [Click here to check out the website!](http://matthewhubbard.pythonanywhere.com "Plant Monitor Website")
+
 ![Demo](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/Pictures/Demo1.gif)
 
-## [Click here to check out the website!](http://matthewhubbard.pythonanywhere.com "Plant Monitor Website")
-
-<h3 align="center">System Diagram</h3>
+<h2 align="center">System Diagram</h2>
 
 <p align="center">
 <img align="center" src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/Flow_Diagram.png" height="75%" width="75%">
