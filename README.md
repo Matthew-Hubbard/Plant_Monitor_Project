@@ -1,16 +1,16 @@
 <h1 align="center" font-weight="bold">Wireless Plant Monitoring</h1>
 
-## [Click here to check out the website!](http://matthewhubbard.pythonanywhere.com "Plant Monitor Website")
-
 ![Demo](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/Pictures/Demo1.gif)
+
+## [Click here to check out the website!](http://matthewhubbard.pythonanywhere.com "Plant Monitor Website")
 
 ### Technology Stack
 
-<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/C++_logo.svg" height="10%" width="10%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Arduino_logo.svg" height="15%" width="15%">
+<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/C++_logo.svg" height="9%" width="9%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Arduino_logo.svg" height="14%" width="14%">
 
-<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/html_5_logo.svg" height="10%" width="10%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/css_3_logo.svg" height="10%" width="10%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/javascript_logo.png" height="10%" width="10%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Jquery_logo.png" height="15%" width="15%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Bootstrap_logo.svg" height="13%" width="13%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Chartjs_logo.png" height="11%" width="11%">
+<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/html_5_logo.svg" height="9%" width="9%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/css_3_logo.svg" height="9%" width="9%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/javascript_logo.png" height="9%" width="9%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Jquery_logo.png" height="14%" width="14%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Bootstrap_logo.svg" height="12%" width="12%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Chartjs_logo.png" height="10%" width="10%">
 
-<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/python_logo.svg" height="24%" width="24%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/SQLite_logo.png" height="24%" width="24%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Django_logo.svg" height="24%" width="24%">
+<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/python_logo.svg" height="23%" width="23%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/SQLite_logo.png" height="23%" width="23%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Django_logo.svg" height="23%" width="23%">
 
 ### About
 **End goal:** To host a website that will track plant data through wireless sensors and tell you when they need watering.
