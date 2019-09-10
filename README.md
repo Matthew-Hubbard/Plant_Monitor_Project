@@ -1,5 +1,10 @@
 <h1 align="center" font-weight="bold">Wireless Plant Monitoring</h1>
 
+### About
+**Goal:** To host a website that tracks plant data through wireless sensors.
+
+I'm developing a system of Arduinos with sensors to monitor plants connected over RF to a master module. The master module has an ESP8266 WiFi chip that uploads data to a Django web server via HTTP POST request.
+
 ![Demo](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/Pictures/Demo1.gif)
 
 ## [Click here to check out the website!](http://matthewhubbard.pythonanywhere.com "Plant Monitor Website")
@@ -10,7 +15,8 @@
 <img align="center" src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/Flow_Diagram.png" height="75%" width="75%">
 </p>
 
-### Technology Stack
+<h2 align="center">Technology Stack</h2>
+<hr>
 
 <p align="center">
 <img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/C++_logo.svg" height="8%" width="8%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Arduino_logo.svg" height="13%" width="13%">
@@ -24,10 +30,8 @@
 <img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/python_logo.svg" height="22%" width="22%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/SQLite_logo.png" height="22%" width="22%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Django_logo.svg" height="22%" width="22%">
 </p>
 
-### About
-**Goal:** To host a website that tracks plant data through wireless sensors.
-
-I'm developing a system of Arduinos with sensors to monitor plants connected over RF to a master module. The master module has an ESP8266 WiFi chip that uploads data to a Django web server via HTTP POST request.
+### Master Sensor With Wifi
+![Master Sensor With Wifi](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/master_prototype_1.jpg)
 
 #### Data Collected From each Wireless Sensor Module
 - Air Temperature
@@ -35,9 +39,6 @@ I'm developing a system of Arduinos with sensors to monitor plants connected ove
 - Sunlight Luminosity (Lux)
 - Humidity
 - Soil Moisture
-
-### Master Sensor With Wifi
-![Master Sensor With Wifi](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/master_prototype_1.jpg)
 
 ## Wiring Diagrams
 ### Sensor Module
