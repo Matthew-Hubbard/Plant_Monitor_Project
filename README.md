@@ -4,6 +4,9 @@
 
 ## [Click here to check out the website!](http://matthewhubbard.pythonanywhere.com "Plant Monitor Website")
 
+### System Diagram
+<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/Flow_Diagram.png" height="100%" width="100%">
+
 ### Technology Stack
 
 <img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/C++_logo.svg" height="9%" width="9%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Arduino_logo.svg" height="14%" width="14%">
@@ -16,8 +19,6 @@
 **Goal:** To host a website that tracks plant data through wireless sensors.
 
 I'm developing a system of Arduinos with sensors to monitor plants connected over RF to a master module. The master module has an ESP8266 WiFi chip that uploads data to a Django web server via HTTP POST request.
-
-<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/Flow_Diagram.png" height="100%" width="100%">
 
 #### Data Collected From each Wireless Sensor Module
 - Air Temperature
