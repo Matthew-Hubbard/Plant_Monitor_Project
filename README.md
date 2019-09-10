@@ -26,7 +26,6 @@ Each sensor module will transmit data to the master module via 2.4Ghz RF. The ma
 - Humidity
 - Soil Moisture
 
-
 ### Master Sensor With Wifi
 ![Master Sensor With Wifi](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/master_prototype_1.jpg)
 
