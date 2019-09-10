@@ -17,6 +17,8 @@
 
 I'm developing a system of Arduinos with sensors to monitor plants connected over RF to a master module. The master module has an ESP8266 WiFi chip that uploads data to a Django web server via HTTP POST request.
 
+<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/flow_diagram.png" height="100%" width="100%">
+
 #### Data Collected From each Wireless Sensor Module
 - Air Temperature
 - Soil Temperature
