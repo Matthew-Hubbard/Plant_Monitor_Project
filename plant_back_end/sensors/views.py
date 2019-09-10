@@ -59,10 +59,10 @@ def about(request):
     context = {'id_list': id_list, 'about': "active"}
     return render(request, 'sensors/about.html', context)
 
-def help(request):
+def setup(request):
     id_list = list(Sensor_data.objects.values_list('sensor_id', flat=True).distinct())
-    context = {'id_list': id_list, 'help': "active"}
-    return render(request, 'sensors/help.html', context)
+    context = {'id_list': id_list, 'setup': "active"}
+    return render(request, 'sensors/setup.html', context)
 
 @csrf_exempt
 def send_data(request):

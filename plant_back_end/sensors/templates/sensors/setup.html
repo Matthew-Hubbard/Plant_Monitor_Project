@@ -1,0 +1,38 @@
+{% extends 'sensors/navbar.html' %}
+
+{% load static %}
+
+<script>
+{% block jquery %}
+{% endblock %}
+</script>
+
+{% block content %}
+    <div class="main_content">
+        <div class="container my-3"> <!-- my-3 is margin y for spacing -->
+            <div class='row'>
+                <div class='col-md-12'>
+                    <h1 class='display-3'>Setup</h1> 
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-md-12'>
+                    <h4 style="text-align: center">System Flow Chart</h4>
+                    <img class = "center-block" src = "{% static 'images/Flow_Diagram.png'%}" style="max-width: 80%; max-height: 80%;"></img><br>
+                    <br>
+                    <h4 style="text-align: center">Wiring Diagram Sensor Module </h4>
+                    <img class = "center-block" src = "{% static 'images/Plant_Monitoring_Project_v1.0_bb.png'%}" style="max-width: 80%; max-height: 80%;"></img><br>
+                    <br>
+                    <h4 style="text-align: center">Master Sensor Module </h4>
+                    <img class = "center-block" src = "{% static 'images/master_prototype_1.jpg'%}" style="max-width: 80%; max-height: 80%;"></img><br>
+                    <br>
+                    <span class="paragraph_text align-center">
+                        For source code and documentation, check out the README on my github page!<br>
+                        <strong>Github: </strong><a href="https://github.com/Matthew-Hubbard/Plant_Monitor_Project"> https://github.com/Matthew-Hubbard/Plant_Monitor_Project</a><br>
+                        <br>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

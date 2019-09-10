@@ -8,11 +8,11 @@
 </script>
 
 {% block content %}
-    <div class="graph_9x9">
-        <div class="container my-3"> <!-- my-3 is margin y for spacing -->
+    <div class="main_content">
+        <div class="container my-3">
             <div class='row'>
                 <div class='col-md-12'>
-                    <h1 class='display-4'>About</h1> 
+                    <h1 class='display-3'>About</h1> 
                 </div>
             </div>
             <div class='row'>
@@ -21,13 +21,68 @@
                 </div>
                 <div class='col-md-9 my-3'>
                     <span class="paragraph_text">
-                        <strong>What?</strong><br>
-                        This website tracks the status of my house plants. It records temperature, humidity, soil moisture, and light.<br> 
-                        <strong>Why?</strong><br>
-                        I love a good challenge and this project gave me the opportunity to showcase my skills as a software engineer.<br>
-                        <strong>Where's the source code?</strong><br>
-                        Right here! <a href="https://github.com/Matthew-Hubbard/Plant_Monitor_Project"> https://github.com/Matthew-Hubbard/Plant_Monitor_Project</a><br>
+                        <p>
+                            <strong>What?</strong>
+                            <br>
+                            This website tracks the status of house plants from wireless sensors. It records temperature, humidity, soil moisture, and light.
+                            <br> 
+                            <strong>Why?</strong>
+                            <br>
+                            I love a good challenge and this project gave me the opportunity to showcase my skills as a software engineer. I also
+                            really love plants! 
+                            <br>
+                            <strong>Where's the source code?</strong>
+                            <br>
+                            Right here! <a href="https://github.com/Matthew-Hubbard/Plant_Monitor_Project"> https://github.com/Matthew-Hubbard/Plant_Monitor_Project</a>
+                            <br>
+                            <strong>Who are you?</strong>
+                            <br>
+                            I'm a senior computer science student at Portland State University graduating December 2019. I love video games, classical guitar, running,
+                            and programming!
+                            <br>
+                            <strong>How do I contact you?</strong>
+                            <br>
+                            You can email me at <a href = "mailto: matthewhubbard39@gmail.com">MatthewHubbard39@gmail.com</a>, or message me on 
+                            <a href= "https://www.linkedin.com/in/matthew-r-hubbard/">LinkedIn</a>.
+                            <br>
+                            <strong>Are you looking for work?</strong>
+                            <br>
+                            Yes! Here's my <a href="{% static 'Hubbard_Matthew_Resume.pdf' %}">resume</a>.
+                            <br>
+                        </p>
+                        <h2 align="center">Technology Stack</h2>
+                        <img class="center-block" src= "{% static 'images/stack_logos/Combined.PNG' %}"></img>
+
+                        <br>
+                        <h4 align="center">Image Attributions<h4>
+                        <div class = "citations">
+                            <a>Background pattern made by <a href="http://buysellgraphic.com/" title="buysellgraphic">BSGStudio</a> from <a href="https://all-free-download.com/free-vector/download/plant-pattern-leaf-pot-icons-colored-design_6840621.html" title="all-free-download">all-free-download</a></a>
+                            <div>Icons made by <a href="https://www.flaticon.com/authors/pixel-buddha" title="Pixel Buddha">Pixel Buddha</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div>
+
+                            <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div>
+                            <div>Icons made by <a href="https://www.flaticon.com/authors/those-icons" title="Those Icons">Those Icons</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div>
+                            <div>Icons made by <a href="https://www.flaticon.com/authors/mynamepong" title="mynamepong">mynamepong</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div>
+                            <div>Icons made by <a href="https://www.flaticon.com/authors/monkik" title="monkik">monkik</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div>
+                        </div>
+
                     </span>
+                    <hr>
+
+                    {% comment %} <img src= "{% static 'images/stack_logos/C++_logo.svg' %}"></img>
+
+                    <img src= "{% static 'images/stack_logos/Arduino_logo.svg' %}"></img>
+
+                    <img src= "{% static 'images/stack_logos/html_5_logo.svg' %}"> </img>
+                    <img src= "{% static 'images/stack_logos/css_3_logo.svg' %}"></img>
+                    <img src= "{% static 'images/stack_logos/javascript_logo.png' %}"></img>
+                    <img src= "{% static 'images/stack_logos/Jquery_logo.png' %}"></img>
+                    <img src= "{% static 'images/stack_logos/Bootstrap_logo.svg' %}"></img>
+                    <img src= "{% static 'images/stack_logos/Chartjs_logo.png' %}"></img>
+
+                    <img src= "{% static 'images/stack_logos/python_logo.svg' %}"></img>
+                    <img src= "{% static 'images/stack_logos/SQLite_logo.png' %}"></img>
+                    <img src= "{% static 'images/stack_logos/Django_logo.svg' %}"></img> {% endcomment %}
+
                 </div>
             </div>
         </div>

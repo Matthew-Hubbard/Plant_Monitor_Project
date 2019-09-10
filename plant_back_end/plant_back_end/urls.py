@@ -22,9 +22,8 @@ urlpatterns = [
     path('sensors/', include('sensors.urls')),
     path('graphs/', views.graphs, name='graphs'),
     path('table/', views.table, name='table'),
-    # path(r'^table/(?P<sensor_id>[0-9]+)$', views.table_sensor, name='table_id'),
     path('table/<int:sensor_id>', views.table_sensor, name='table_id'),
-    path('help/', views.help, name='help'),
+    path('setup/', views.setup, name='setup'),
     path('about/', views.about, name='about'),
     path('admin/', admin.site.urls),
 ]
