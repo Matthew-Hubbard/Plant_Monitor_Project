@@ -2,8 +2,15 @@
 
 ## [Click here to check out the website!](http://matthewhubbard.pythonanywhere.com "Plant Monitor Website")
 
-### Demo
 ![Demo](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/Pictures/Demo1.gif)
+
+### Technology Stack
+
+<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/C++_logo.svg" height="10%" width="10%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Arduino_logo.svg" height="15%" width="15%">
+
+<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/html_5_logo.svg" height="10%" width="10%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/css_3_logo.svg" height="10%" width="10%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/javascript_logo.png" height="10%" width="10%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Jquery_logo.png" height="15%" width="15%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Bootstrap_logo.svg" height="13%" width="13%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Chartjs_logo.png" height="11%" width="11%">
+
+<img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/python_logo.svg" height="24%" width="24%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/SQLite_logo.png" height="24%" width="24%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Django_logo.svg" height="24%" width="24%">
 
 ### About
 **End goal:** To host a website that will track plant data through wireless sensors and tell you when they need watering.
@@ -19,11 +26,9 @@ Each sensor module will transmit data to the master module via 2.4Ghz RF. The ma
 - Humidity
 - Soil Moisture
 
+
 ### Master Sensor With Wifi
 ![Master Sensor With Wifi](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/master_prototype_1.jpg)
-
-
-
 
 ## Wiring Diagrams
 ### Sensor Module
