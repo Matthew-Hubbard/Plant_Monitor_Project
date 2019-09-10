@@ -13,11 +13,9 @@
 <img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/python_logo.svg" height="23%" width="23%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/SQLite_logo.png" height="23%" width="23%"><img src= "https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/plant_back_end/sensors/static/images/stack_logos/Django_logo.svg" height="23%" width="23%">
 
 ### About
-**End goal:** To host a website that will track plant data through wireless sensors and tell you when they need watering.
+**Goal:** To host a website that tracks plant data through wireless sensors.
 
-I'm developing a system of Arduinos with sensors to monitor plants connected over RF that upload data to a full stack website.
-
-Each sensor module will transmit data to the master module via 2.4Ghz RF. The master module will then send the data via serial into an ESP8266 Wifi module. The ESP8266 will then transmit the data as a JSON via HTTP to a Django web server. From there the data will be presented on a website using a Vue.js frontend.
+I'm developing a system of Arduinos with sensors to monitor plants connected over RF to a master module. The master module has an ESP8266 WiFi chip that uploads data to a Django web server via HTTP POST request.
 
 #### Data Collected From each Wireless Sensor Module
 - Air Temperature
