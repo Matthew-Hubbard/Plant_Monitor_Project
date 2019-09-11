@@ -7,7 +7,7 @@ I'm developing a system of Arduinos with sensors to monitor plants connected ove
 
 ### [Click here to check out the website!](http://matthewhubbard.pythonanywhere.com "Plant Monitor Website")
 
-![Demo](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/Pictures/Demo1.gif)
+![Demo](https://github.com/Matthew-Hubbard/Plant_Monitor_Project/blob/master/Pictures/Demo2.gif)
 
 <h2 align="center">System Diagram</h2>
 
