@@ -14,7 +14,6 @@
 #define ESP_RX 10
 
 float moisture_raw = 0.0;
-//float moisture = 0; //scale from 0-10 dry to wet
 
 // DHT-22 Humidity/Air Temp Vars
 #define DHTTYPE 22 
@@ -65,8 +64,6 @@ int send_data(const String & data, SoftwareSerial & espSerial);
 /////////////////////////////////////////////////
 
 void setup() {
-  // setup code, runs once:
-
   // Start serial for debugging
   Serial.begin(9600);
   while(!Serial); //wait until serial is setup
@@ -80,7 +77,7 @@ void setup() {
   //Soil temp
   sensors.begin();
 
-    Serial.println(F("[Arduino] : Starting Adafruit TSL2591 Test!"));
+  Serial.println(F("[Arduino] : Starting Adafruit TSL2591 Test!"));
   
   if (tsl.begin()) 
     Serial.println(F("[Arduino] : Found a TSL2591 sensor"));
@@ -98,17 +95,6 @@ void setup() {
 
   Serial.println("[Arduino] : Waiting for ESP to finish setup.");
   delay(10000); // wait for ESP
-/*
-  Serial.println("[Arduino] : Setup Finished.");
-  while(msg != "ESP READY")
-  {
-    send_data("ARDUINO READY", esp_serial);
-    delay(1000);
-    recieve_data(msg, esp_serial);
-  }
-  
-  Serial.println("[Arduino] : ESP setup complete.");
-  */
 }
 
 void loop() {
@@ -164,9 +150,8 @@ void loop() {
   delay(5000);
   sensor_id = (sensor_id + 1) % 4;
 }
-/////////////////////////////////////////////////
 
-////////////FUNCTIONS///////////////////////////
+/////////////////////-FUNCTIONS-///////////////////////////
 
 float get_moisture()
 {
@@ -265,6 +250,57 @@ void advancedRead(light_sensor & light_data)
   light_data.lux = tsl.calculateLux(light_data.full, light_data.ir);
 }
 
+// Send data via software serial
+int send_data(const String & data, SoftwareSerial & serial_out)
+{
+  String recieved = ""; // message back from serial
+  int i = 0;
+  serial_out.flush();
+  
+  //Debugging info
+  Serial.println("[Arduino] : Writing data over serial to ESP...");
+  Serial.println("[Arduino] : " + data + " -> [ESP]");
+  
+  // Sending data over serial
+  serial_out.write(data.c_str());
+
+  delay(SERIAL_DELAY);
+
+  // Now wait for confirmation from ESP. ESP Should send data back to confirm.
+  while(!serial_out.available() && i < SERIAL_ITTER) {++i;} // Wait for serial_out read buffer to be empty...
+
+  if(i == SERIAL_ITTER - 1 )
+  {
+    Serial.print("[Arduino] [ERROR] : serial_out not available to read! (read buffer not empty!)");
+    return -1;
+  }
+
+  i = 0;
+  while(recieved != data && i < SERIAL_ITTER)
+  {
+    recieved = serial_out.readString();
+    ++i;
+  }
+  if(i >= SERIAL_ITTER - 1)
+  {
+    Serial.println("[Arduino] [ERROR] : Couldn't recieve confirmation from ESP. (recieved: " + recieved + ")");
+    return -2;
+  }
+  else
+  {
+    Serial.println("[ESP] : " + recieved);
+    if(recieved == data)
+      Serial.println("[Arduino] : Transmition success!");
+    else
+    {
+        Serial.println("[Arduino] : Transmition failed.");
+    }
+    
+    serial_out.flush();
+    return 0;
+  }
+}
+
 /*
 //recieve data from ESP
 int recieve_data(String & data, SoftwareSerial & serial_in)
@@ -322,66 +358,3 @@ int recieve_data(String & data, SoftwareSerial & serial_in)
  return 0;
 }
 */
-
-// Send data via software serial
-int send_data(const String & data, SoftwareSerial & serial_out)
-{
-  String recieved = ""; // message back from serial
-  int i = 0;
-  //int num_bytes = serial_out.availableForWrite(); // check if we have anything still in write buffer //no availableForWrite on softwareserial?
-  //if(num_bytes > 0)
-  //{
-  //  Serial.print("[Arduino] [ERROR] : Bytes in write buffer. (num_bytes: ");
-  //  Serial.print(num_bytes);
-  //  Serial.println(")");
-  //  Serial.println("Flushing...");
-    serial_out.flush();
-  //}
-  
-  //Debugging info
-  Serial.println("[Arduino] : Writing data over serial to ESP...");
-  Serial.println("[Arduino] : " + data + " -> [ESP]");
-  
-  // Sending data over serial
-  serial_out.write(data.c_str());
-
-  delay(SERIAL_DELAY);
-
-  // Now wait for confirmation from ESP. ESP Should send data back to confirm.
-
-  while(!serial_out.available() && i < SERIAL_ITTER) {++i;} // Wait for serial_out read buffer to be empty...
-
-  if(i == SERIAL_ITTER - 1 )
-  {
-    Serial.print("[Arduino] [ERROR] : serial_out not available to read! (read buffer not empty!)");
-    return -1;
-  }
-
-  i = 0;
-  while(recieved != data && i < SERIAL_ITTER)
-  {
-    //while (serial_out.available())
-    {
-      recieved = serial_out.readString();
-    }
-    ++i;
-  }
-  if(i >= SERIAL_ITTER - 1)
-  {
-    Serial.println("[Arduino] [ERROR] : Couldn't recieve confirmation from ESP. (recieved: " + recieved + ")");
-    return -2;
-  }
-  else
-  {
-    Serial.println("[ESP] : " + recieved);
-    if(recieved == data)
-      Serial.println("[Arduino] : Transmition success!");
-    else
-    {
-        Serial.println("[Arduino] : Transmition failed.");
-    }
-    
-    serial_out.flush();
-    return 0;
-  }
-}
