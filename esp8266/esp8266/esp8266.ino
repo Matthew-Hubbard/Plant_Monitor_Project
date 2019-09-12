@@ -20,9 +20,10 @@ int recieve_data(String & data);
 int send_data(const String & data);
 const int SERIAL_DELAY = 500;
 const int SERIAL_ITTER = 500;
+const char delimiter = ';';
 
-WiFiClient client;
-HTTPClient http;
+String get_payload();
+String get_data(const String & sensor_data, int & pos, const int & len);
 
 void setup() {
   Serial.begin(9600);
@@ -37,52 +38,99 @@ void setup() {
 
 void loop() {
   // wait for WiFi connection
-  String sensor_data = "";
 
-  // Connect to the server at API endpoint
+  WiFiClient client;
+  HTTPClient http;
+
   if(http.begin(client, "http://" + String(IP) + ":8000/sensors/send_data/"))
   {
     http.addHeader("Content-Type", "multipart/form-data; boundary=boundary");
-    //String payload = "--boundary\r\nContent-Disposition: form-data; name=\"sensor_id\"\r\n\r\n7\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_soil\"\r\n\r\n11.11\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_room\"\r\n\r\n22.22\r\n--boundary\r\nContent-Disposition: form-data; name=\"humidity\"\r\n\r\n33.33\r\n--boundary\r\nContent-Disposition: form-data; name=\"heat_index\"\r\n\r\n44.44\r\n--boundary\r\nContent-Disposition: form-data; name=\"moisture\"\r\n\r\n55.55\r\n--boundary\r\nContent-Disposition: form-data; name=\"lux\"\r\n\r\n66.66\r\n--boundary\r\nContent-Disposition: form-data; name=\"visible\"\r\n\r\n777\r\n--boundary\r\nContent-Disposition: form-data; name=\"ir\"\r\n\r\n888\r\n--boundary\r\nContent-Disposition: form-data; name=\"full\"\r\n\r\n999\r\n--boundary--";
 
-    // Get sensor data from serial connection
-    recieve_data(sensor_data);
-    String payload = "--boundary\r\nContent-Disposition: form-data; name=\"sensor_id\"\r\n\r\n";
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_soil\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_room\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"humidity\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"heat_index\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"moisture\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"lux\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"visible\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"ir\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"full\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary--";
+    //String payload = "--boundary\r\nContent-Disposition: form-data; name=\"sensor_id\"\r\n\r\n7\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_soil\"\r\n\r\n11.11\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_room\"\r\n\r\n22.22\r\n--boundary\r\nContent-Disposition: form-data; name=\"humidity\"\r\n\r\n33.33\r\n--boundary\r\nContent-Disposition: form-data; name=\"heat_index\"\r\n\r\n44.44\r\n--boundary\r\nContent-Disposition: form-data; name=\"moisture\"\r\n\r\n55.55\r\n--boundary\r\nContent-Disposition: form-data; name=\"lux\"\r\n\r\n66.66\r\n--boundary\r\nContent-Disposition: form-data; name=\"visible\"\r\n\r\n777\r\n--boundary\r\nContent-Disposition: form-data; name=\"ir\"\r\n\r\n888\r\n--boundary\r\nContent-Disposition: form-data; name=\"full\"\r\n\r\n999\r\n--boundary--"; // Get formatted HTTP POST request from arduino via serial String payload = get_payload();
+    String payload = get_payload();
 
     // Send post request with payload (upload sensor data to Django web server)
     int httpCode = http.POST(payload);
   }
 
-  delay(10000);
+  delay(100);
+}
+
+String get_payload()
+{
+  String sensor_data = "";
+  int pos = 0;
+  int len = 0;
+  String data = "";
+  String payload = "";
+
+  recieve_data(sensor_data);
+  // sensor_data = "9;71.15;73.76;59.50;73.63;621.00;243.84;5615;1419;7034;";
+  len = sensor_data.length();
+
+  // Extract data from sensor_data and format HTTP POST form request
+  payload = "--boundary\r\nContent-Disposition: form-data; name=\"sensor_id\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_soil\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_room\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+  
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"humidity\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"heat_index\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"moisture\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"lux\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"visible\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"ir\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"full\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary--";
+  return payload;
+}
+
+String get_data(const String & sensor_data, int & pos, const int & len)
+{
+  String data = "";
+
+  if(pos >= len)
+  {
+    // out of bounds!
+    data = "-";
+    return data;
+  }
+
+  while(pos < len && sensor_data[pos] != delimiter) 
+  {
+    data += sensor_data[pos];
+    ++pos;
+  }
+  ++pos;
+  return data;
 }
 
 int recieve_data(String & data)
