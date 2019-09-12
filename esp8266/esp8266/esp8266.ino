@@ -4,7 +4,6 @@
 #include <ESP8266HTTPClient.h>
 
 #ifndef STASSID
-
 //#define STASSID "Samsung Galaxy S7 8574"
 //#define STAPSK  "auhq4212"
 //#define IP "192.168.43.225"
@@ -12,7 +11,6 @@
 #define STASSID "CenturyLink0853"
 #define STAPSK  "htizeeynhc9wm7"
 #define IP "192.168.0.72"
-
 #endif
 
 const char* ssid = STASSID;
@@ -22,95 +20,117 @@ int recieve_data(String & data);
 int send_data(const String & data);
 const int SERIAL_DELAY = 500;
 const int SERIAL_ITTER = 500;
+const char delimiter = ';';
+
+String get_payload();
+String get_data(const String & sensor_data, int & pos, const int & len);
 
 void setup() {
-
-  // Serial.begin(115200);
-  // Serial.setDebugOutput(true);
-
-  //Serial.begin(115200);
   Serial.begin(9600);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
-  //Serial.println("");
 
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    //Serial.print(".");
   }
-  //Serial.println("");
-  //Serial.print("Connected to ");
-  //Serial.println(ssid);
-  //Serial.print("IP address: ");
-  //Serial.println(WiFi.localIP());
-  
-  //send that we're ready and wait for Arduino to be ready.
-  /*
-  String msg = "";
-  while(msg != "ARDUINO READY")
-  {
-    send_data("ESP READY");
-    delay(1000);
-    recieve_data(msg);
-  }
-  */
 }
 
 void loop() {
   // wait for WiFi connection
 
-  String sensor_data = "";
-  
   WiFiClient client;
   HTTPClient http;
-  //Serial.print("[HTTP] begin...\n");
-  //Serial.print("Connecting to " + String(IP) + " with http...\n");
+
   if(http.begin(client, "http://" + String(IP) + ":8000/sensors/send_data/"))
   {
     http.addHeader("Content-Type", "multipart/form-data; boundary=boundary");
-    
-    //String payload = "--boundary\r\nContent-Disposition: form-data; name=\"sensor_id\"\r\n\r\n7\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_soil\"\r\n\r\n11.11\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_room\"\r\n\r\n22.22\r\n--boundary\r\nContent-Disposition: form-data; name=\"humidity\"\r\n\r\n33.33\r\n--boundary\r\nContent-Disposition: form-data; name=\"heat_index\"\r\n\r\n44.44\r\n--boundary\r\nContent-Disposition: form-data; name=\"moisture\"\r\n\r\n55.55\r\n--boundary\r\nContent-Disposition: form-data; name=\"lux\"\r\n\r\n66.66\r\n--boundary\r\nContent-Disposition: form-data; name=\"visible\"\r\n\r\n777\r\n--boundary\r\nContent-Disposition: form-data; name=\"ir\"\r\n\r\n888\r\n--boundary\r\nContent-Disposition: form-data; name=\"full\"\r\n\r\n999\r\n--boundary--";
 
-    // Get sensor data from serial connection
-    recieve_data(sensor_data);
-    String payload = "--boundary\r\nContent-Disposition: form-data; name=\"sensor_id\"\r\n\r\n";
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_soil\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_room\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"humidity\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"heat_index\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"moisture\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"lux\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"visible\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"ir\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"full\"\r\n\r\n";
-    recieve_data(sensor_data);
-    payload += sensor_data;
-    payload += "\r\n--boundary--";
+    //String payload = "--boundary\r\nContent-Disposition: form-data; name=\"sensor_id\"\r\n\r\n7\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_soil\"\r\n\r\n11.11\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_room\"\r\n\r\n22.22\r\n--boundary\r\nContent-Disposition: form-data; name=\"humidity\"\r\n\r\n33.33\r\n--boundary\r\nContent-Disposition: form-data; name=\"heat_index\"\r\n\r\n44.44\r\n--boundary\r\nContent-Disposition: form-data; name=\"moisture\"\r\n\r\n55.55\r\n--boundary\r\nContent-Disposition: form-data; name=\"lux\"\r\n\r\n66.66\r\n--boundary\r\nContent-Disposition: form-data; name=\"visible\"\r\n\r\n777\r\n--boundary\r\nContent-Disposition: form-data; name=\"ir\"\r\n\r\n888\r\n--boundary\r\nContent-Disposition: form-data; name=\"full\"\r\n\r\n999\r\n--boundary--"; // Get formatted HTTP POST request from arduino via serial String payload = get_payload();
+    String payload = get_payload();
 
-    //Serial.print("[HTTP] POST...\n");
+    // Send post request with payload (upload sensor data to Django web server)
     int httpCode = http.POST(payload);
-    //Serial.print("httpCode: "); Serial.print(httpCode);
   }
 
-  delay(10000);
+  delay(100);
+}
+
+String get_payload()
+{
+  String sensor_data = "";
+  int pos = 0;
+  int len = 0;
+  String data = "";
+  String payload = "";
+
+  recieve_data(sensor_data);
+  // sensor_data = "9;71.15;73.76;59.50;73.63;621.00;243.84;5615;1419;7034;";
+  len = sensor_data.length();
+
+  // Extract data from sensor_data and format HTTP POST form request
+  payload = "--boundary\r\nContent-Disposition: form-data; name=\"sensor_id\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_soil\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"temp_room\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+  
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"humidity\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"heat_index\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"moisture\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"lux\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"visible\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"ir\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary\r\nContent-Disposition: form-data; name=\"full\"\r\n\r\n";
+  data = get_data(sensor_data, pos, len);
+  payload += data;
+
+  payload += "\r\n--boundary--";
+  return payload;
+}
+
+String get_data(const String & sensor_data, int & pos, const int & len)
+{
+  String data = "";
+
+  if(pos >= len)
+  {
+    // out of bounds!
+    data = "-";
+    return data;
+  }
+
+  while(pos < len && sensor_data[pos] != delimiter) 
+  {
+    data += sensor_data[pos];
+    ++pos;
+  }
+  ++pos;
+  return data;
 }
 
 int recieve_data(String & data)
@@ -131,7 +151,6 @@ int recieve_data(String & data)
   //get data from Arduino Sensor
   i = 0;
   while (Serial.available() && i < SERIAL_ITTER)
-  //while (Serial.available())
   {
     data = Serial.readString();
     ++i;
@@ -144,28 +163,27 @@ int recieve_data(String & data)
     return -2;
   }
 
- // Send data back to Arduino Sensor to confirm transmition
-
- int num_bytes = Serial.availableForWrite(); // check if we have anything still in write buffer
- if(num_bytes > 0)
- {
-   // [ERROR] : bytes already in write buffer...
-   Serial.flush();
- }
- 
- // Sending data over serial to arduino sensor
- delay(SERIAL_DELAY);
- if(data != "")
-   Serial.write(data.c_str());
-  else
+  // Send data back to Arduino Sensor to confirm transmition
+  int num_bytes = Serial.availableForWrite(); // check if we have anything still in write buffer
+  if(num_bytes > 0)
   {
-    recieve_data(data);
+    // [ERROR] : bytes already in write buffer...
+    Serial.flush();
   }
   
- return 0;
+  // Sending data over serial to arduino sensor
+  delay(SERIAL_DELAY);
+  if(data != "")
+    Serial.write(data.c_str());
+  else
+    recieve_data(data);
+    
+  return 0;
 }
 
 /*
+// If I need to send data to Arduino in the future...
+
 int send_data(const String & data)
 {
   String recieved = ""; // message back from serial
