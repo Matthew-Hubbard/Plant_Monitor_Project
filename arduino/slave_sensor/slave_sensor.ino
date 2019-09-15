@@ -1,4 +1,3 @@
-#include <SoftwareSerial.h> // Communitcate to ESP
 #include "DHT.h" // DHT library
 #include <OneWire.h> // Used for soil temp probe
 #include <DallasTemperature.h> // Used for soil temp probe
@@ -10,14 +9,17 @@
 
 
 // Pins
+// #define MOISTURE_PIN 0 // Moisture sensor data connected to analog pin 0
+// #define DHTPIN 2
+// #define SOIL_TEMP_PIN 3 // Soil temp data pin
+
+// Uno
 #define MOISTURE_PIN 0 // Moisture sensor data connected to analog pin 0
-#define DHTPIN 2
-#define SOIL_TEMP_PIN 3 // Soil temp data pin
-#define ESP_TX 4
-#define ESP_RX 5
+#define DHTPIN A0
+#define SOIL_TEMP_PIN A1 // Soil temp data pin
 
 RH_NRF24 nrf24; //nrf
-String recieve_rf();
+void send_to_master(String & payload);
 
 float moisture_raw = 0.0;
 
@@ -44,7 +46,6 @@ struct light_sensor
 };
 light_sensor light_data; // holds all of the TSL2591 light sensor data
 
-SoftwareSerial esp_serial(ESP_TX, ESP_RX); // RX, TX , Used to send data to ESP8266
 const int SERIAL_DELAY = 250;
 const int SERIAL_ITTER = 100;
 String msg = "";
@@ -56,8 +57,9 @@ float temp_soil=0;
 
 Adafruit_TSL2591 tsl = Adafruit_TSL2591(2591); // pass in a number for the sensor identifier (for your use later)
 
-int sensor_id = 0;
-String payload = "";
+int sensor_id = 7;
+String payload1 = "";
+String payload2 = "";
 
 // Functions
 float get_moisture();
@@ -65,8 +67,6 @@ void get_dht(dht_data_struct & dht_in);
 void configureSensor(void); // tsl2591 lux
 void displaySensorDetails(void); //lux 
 void advancedRead(light_sensor & light_data); //lux
-int recieve_data(String & data, SoftwareSerial & serial_in);
-int send_data(const String & data, SoftwareSerial & espSerial);
 
 //////////////////////////////////////////////////////////////
 
@@ -74,8 +74,6 @@ void setup() {
   // Start serial for debugging
   Serial.begin(9600);
   // while(!Serial); //wait until serial is setup
-
-  esp_serial.begin(9600); // esp serial connection
 
   //NRF
   if (!nrf24.init())
@@ -109,99 +107,103 @@ void setup() {
   /* Configure the sensor */
   configureSensor();
 
-  Serial.println("[Arduino] : Waiting for ESP to finish setup.");
-  delay(10000); // wait for ESP
+  delay(10000);
 }
 
 void loop() {
-  payload = "";
+  payload1 = "";
+  payload2 = "";
 
-  //Serial.print("[Arduino] : Sensor ID: "); Serial.print(sensor_id); Serial.print(" ");
-  //moisture_raw = get_moisture();
-  //Serial.print("Moisture: ");
-  //Serial.print(moisture_raw);
+  Serial.print("[Arduino] : Sensor ID: "); Serial.print(sensor_id); Serial.print(" ");
+  moisture_raw = get_moisture();
+  Serial.print("Moisture: ");
+  Serial.print(moisture_raw);
 
-  //get_dht(dht_data);
-  //Serial.print(F(" Humidity: "));
-  //Serial.print(dht_data.humidity);
-  //Serial.print(F("%  Temperature: "));
-  //Serial.print(dht_data.air_temp_c);
-  //Serial.print(F("°C "));
-  //Serial.print(dht_data.air_temp_f);
-  //Serial.print(F("°F  Heat index: "));
-  //Serial.print(dht_data.heat_index_c);
-  //Serial.print(F("°C "));
-  //Serial.print(dht_data.heat_index_f);
-  //Serial.print(F("°F"));
+  get_dht(dht_data);
+  Serial.print(F(" Humidity: "));
+  Serial.print(dht_data.humidity);
+  Serial.print(F("%  Temperature: "));
+  Serial.print(dht_data.air_temp_c);
+  Serial.print(F("°C "));
+  Serial.print(dht_data.air_temp_f);
+  Serial.print(F("°F  Heat index: "));
+  Serial.print(dht_data.heat_index_c);
+  Serial.print(F("°C "));
+  Serial.print(dht_data.heat_index_f);
+  Serial.print(F("°F"));
 
-  ////Soil temp probe ***CHANGE TO USE STRUCT AND CALL FUNC****
-  //sensors.requestTemperatures();
-  //Celcius=sensors.getTempCByIndex(0);
-  //temp_soil=sensors.toFahrenheit(Celcius);
-  ////Serial.print(Celcius);
-  //Serial.print(" Soil temp F: ");
-  //Serial.print(temp_soil);  
+  //Soil temp probe ***CHANGE TO USE STRUCT AND CALL FUNC****
+  sensors.requestTemperatures();
+  Celcius=sensors.getTempCByIndex(0);
+  temp_soil=sensors.toFahrenheit(Celcius);
+  //Serial.print(Celcius);
+  Serial.print(" Soil temp F: ");
+  Serial.print(temp_soil);  
 
-  //advancedRead(light_data);
+  advancedRead(light_data);
 
-  //Serial.print(F(" IR: ")); Serial.print(light_data.ir);  Serial.print(F("  "));
-  //Serial.print(F("Full: ")); Serial.print(light_data.full); Serial.print(F("  "));
-  //Serial.print(F("Visible: ")); Serial.print(light_data.visible); Serial.print(F("  "));
-  //Serial.print(F("Lux: ")); Serial.println(light_data.lux, 6);
+  Serial.print(F(" IR: ")); Serial.print(light_data.ir);  Serial.print(F("  "));
+  Serial.print(F("Full: ")); Serial.print(light_data.full); Serial.print(F("  "));
+  Serial.print(F("Visible: ")); Serial.print(light_data.visible); Serial.print(F("  "));
+  Serial.print(F("Lux: ")); Serial.println(light_data.lux, 6);
 
-  ////Send to ESP
-  //payload = String(sensor_id) + String(';') + \
-  //String(temp_soil) + String(';') + \
-  //String(dht_data.air_temp_f) + String(';') + \
-  //String(dht_data.humidity) + String(';') + \
-  //String(dht_data.heat_index_f) + String(';') + \
-  //String(moisture_raw) + String(';') + \
-  //String(light_data.lux) + String(';') + \
-  //String(light_data.visible) + String(';') + \
-  //String(light_data.ir) + String(';') + \
-  //String(light_data.full) + String(';');
-  //send_data(payload, esp_serial);
+  //Send to master sensor
+  payload1 = String(sensor_id) + String(';') + \
+  String(temp_soil) + String(';') + \
+  String(dht_data.air_temp_f) + String(';') + \
+  String(dht_data.humidity) + String(';') + \
+  String(moisture_raw) + String(';');
 
-  payload = recieve_rf();
-  //payload += recieve_rf();
+  payload2 = String(dht_data.heat_index_f) + String(';') + \
+  String(light_data.lux) + String(';') + \
+  String(light_data.visible) + String(';') + \
+  String(light_data.ir) + String(';') + \
+  String(light_data.full) + String(';');
 
-  //Serial.print("\npayload: "); Serial.println(payload);
-  Serial.println("\n[Arduino] : Sent all data to ESP!");
+  send_to_master(payload1);
+  //send_to_master(payload2);
 
-  Serial.println("[Arduino] : Waiting for ESP to make HTTP Post request...\n");
   delay(2000);
-  sensor_id = (sensor_id + 1) % 4;
 }
 
 /////////////////////-FUNCTIONS-///////////////////////////
 
-String recieve_rf()
+void send_to_master(String & payload)
 {
-  //Get data from sensor
-  if (nrf24.available())
-  {
-    // Should be a message for us now   
-    uint8_t buf[RH_NRF24_MAX_MESSAGE_LEN];
-    uint8_t len = sizeof(buf);
+  // uint8_t plen = payload.length();
+  // uint8_t data[RH_NRF24_MAX_MESSAGE_LEN]; 
+  // uint8_t dlen = sizeof(data);
+
+  // memcpy(data, payload.c_str(), plen);
+  // data[plen + 1] = '\0';
+
+  //payload.toCharArray(data, dlen);
+
+  nrf24.send(uint8_t(payload.c_str()), sizeof(uint8_t(payload.c_str())));
+  //Serial.print("[ARDUINO] : '"); Serial.print(data); Serial.println("' -> [MASTER SENSOR]");
+  
+  nrf24.waitPacketSent();
+  // Now wait for a reply
+  uint8_t buf[RH_NRF24_MAX_MESSAGE_LEN];
+  uint8_t len = sizeof(buf);
+
+  if (nrf24.waitAvailableTimeout(2000))
+  { 
+    // Should be a reply message for us now   
     if (nrf24.recv(buf, &len))
     {
-//      NRF24::printBuffer("request: ", buf, len);
-      Serial.print("Got request.");
-      Serial.print("got request: ");
-      Serial.println((char*)buf);
-      String message((char*)buf);
-      
-      // Send a reply
-      nrf24.send(buf, sizeof(buf));
-      nrf24.waitPacketSent();
-      Serial.println("Sent a reply");
-      return message;
+      Serial.print("[MASTER SENSOR] : "); Serial.println((char*)buf);
+      Serial.println("\n[Arduino] : Sent all data to Master Sensor!");
     }
     else
     {
       Serial.println("recv failed");
     }
-  } 
+  }
+  else
+  {
+    Serial.println("[ARDUINO] : NO REPLY FROM MASTER");
+  }
 }
 
 float get_moisture()
@@ -300,112 +302,3 @@ void advancedRead(light_sensor & light_data)
   light_data.visible = light_data.full - light_data.ir;
   light_data.lux = tsl.calculateLux(light_data.full, light_data.ir);
 }
-
-// Send data via software serial
-int send_data(const String & data, SoftwareSerial & serial_out)
-{
-  String recieved = ""; // message back from serial
-  int i = 0;
-  serial_out.flush();
-  
-  //Debugging info
-  Serial.println("[Arduino] : Writing data over serial to ESP...");
-  Serial.println("[Arduino] : " + data + " -> [ESP]");
-  
-  // Sending data over serial
-  serial_out.write(data.c_str());
-
-  delay(SERIAL_DELAY);
-
-  // Now wait for confirmation from ESP. ESP Should send data back to confirm.
-  while(!serial_out.available() && i < SERIAL_ITTER) {++i;} // Wait for serial_out read buffer to be empty...
-
-  if(i == SERIAL_ITTER - 1 )
-  {
-    Serial.print("[Arduino] [ERROR] : serial_out not available to read! (read buffer not empty!)");
-    return -1;
-  }
-
-  i = 0;
-  while(recieved != data && i < SERIAL_ITTER)
-  {
-    recieved = serial_out.readString();
-    ++i;
-  }
-  if(i >= SERIAL_ITTER - 1)
-  {
-    Serial.println("[Arduino] [ERROR] : Couldn't recieve confirmation from ESP. (recieved: " + recieved + ")");
-    return -2;
-  }
-  else
-  {
-    Serial.println("[ESP] : " + recieved);
-    if(recieved == data)
-      Serial.println("[Arduino] : Transmition success!");
-    else
-    {
-        Serial.println("[Arduino] : Transmition failed.");
-    }
-    
-    serial_out.flush();
-    return 0;
-  }
-}
-
-/*
-//recieve data from ESP
-int recieve_data(String & data, SoftwareSerial & serial_in)
-{
-  data = "";
-  int i = 0;
-
-  // Wait for serial_in read buffer to be empty...
-  while(!serial_in.available() && i < SERIAL_ITTER) {++i;} 
-
-  if(i == SERIAL_ITTER - 1 )
-  {
-    // serial_in not available to read! (read buffer not empty!)");
-    recieve_data(data, serial_in);
-    return -1;
-  }
-
-  //get data from Arduino Sensor
-  i = 0;
-  while (serial_in.available() && i < SERIAL_ITTER)
-  //while (serial_in.available())
-  {
-    data = serial_in.readString();
-    ++i;
-  }
-
-  Serial.println("[ESP] : " + data);
-
-  if(i >= SERIAL_ITTER - 1)
-  {
-    //[ERROR] : Couldn't recieve data
-    recieve_data(data, serial_in);
-    return -2;
-  }
-
- // Send data back to ESP to confirm transmition
-
-// int num_bytes = serial_in.availableForWrite(); // check if we have anything still in write buffer
-// if(num_bytes > 0)
-// {
-   // [ERROR] : bytes already in write buffer...
-   serial_in.flush();
- //}
- 
- // Sending data over serial to arduino sensor
- delay(SERIAL_DELAY);
- Serial.println("[ARDUINO] : " + data + " -> [ESP]");
- if(data != "")
-   serial_in.write(data.c_str());
-  else
-  {
-    recieve_data(data, serial_in);
-  }
-  
- return 0;
-}
-*/
