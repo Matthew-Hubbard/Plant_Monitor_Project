@@ -4,9 +4,9 @@
 #include <Wire.h> // TSL2591 light sensor
 #include <Adafruit_Sensor.h> // TSL2591 light sensor
 #include "Adafruit_TSL2591.h" // TSL2591  light sensor (Dynamic Range: 600M:1, Max Lux: 88k)
-#include <SPI.h> // nrf
-#include <RH_NRF24.h> // nrf
-
+#include <RF24Network.h> // nrf2401+
+#include <RF24.h> // nrf2401+
+#include <SPI.h> // nrf2401+
 
 // Pins
 // #define MOISTURE_PIN 0 // Moisture sensor data connected to analog pin 0
@@ -18,8 +18,22 @@
 #define DHTPIN A0
 #define SOIL_TEMP_PIN A1 // Soil temp data pin
 
-RH_NRF24 nrf24; //nrf
-void send_to_master(String & payload);
+
+// nrf2401+
+// Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 7 & 8
+uint8_t sensor_id = 1;
+RF24 radio(7, 8);
+RF24Network network(radio);
+const uint16_t master_node = 00;
+const uint16_t this_node = 01;
+struct packet
+{
+  uint8_t sensor_id;
+  uint8_t packet_number;
+  char data[30];
+};
+String payload1 = "";
+String payload2 = "";
 
 float moisture_raw = 0.0;
 
@@ -57,9 +71,6 @@ float temp_soil=0;
 
 Adafruit_TSL2591 tsl = Adafruit_TSL2591(2591); // pass in a number for the sensor identifier (for your use later)
 
-int sensor_id = 7;
-String payload1 = "";
-String payload2 = "";
 
 // Functions
 float get_moisture();
@@ -67,6 +78,7 @@ void get_dht(dht_data_struct & dht_in);
 void configureSensor(void); // tsl2591 lux
 void displaySensorDetails(void); //lux 
 void advancedRead(light_sensor & light_data); //lux
+void print_packet(packet & my_packet);
 
 //////////////////////////////////////////////////////////////
 
@@ -75,14 +87,11 @@ void setup() {
   Serial.begin(9600);
   // while(!Serial); //wait until serial is setup
 
-  //NRF
-  if (!nrf24.init())
-    Serial.println("init failed");
-  // Defaults after init are 2.402 GHz (channel 2), 2Mbps, 0dBm
-  if (!nrf24.setChannel(1))
-    Serial.println("setChannel failed");
-  if (!nrf24.setRF(RH_NRF24::DataRate2Mbps, RH_NRF24::TransmitPower0dBm))
-    Serial.println("setRF failed");    
+  Serial.begin(9600);
+  SPI.begin();
+  radio.begin();
+  network.begin(90, this_node);
+  Serial.println("[Arduino] : nrf2401+ setup complete.");
 
   //DHT22
   Serial.println(F("[Arduino] : DHT22 test!"));
@@ -111,9 +120,94 @@ void setup() {
 }
 
 void loop() {
-  payload1 = "";
-  payload2 = "";
+  network.update();
 
+  packet request_packet;
+  strcpy(request_packet.data, "");
+
+#ifdef DEBUG_RF
+  Serial.println("[Arduino] : Waiting for request from master");
+#endif
+  while (network.available())
+  {
+    RF24NetworkHeader header_in;
+    network.read(header_in, &request_packet, 32);
+
+    radio.flush_rx(); // Maybe remove??????
+
+    String payload(request_packet.data);
+    Serial.print("[Master] : ");
+    print_packet(request_packet);
+  }
+
+  delay(100);
+
+  network.update();
+  if (strcmp(request_packet.data, "request") == 0)
+  {
+#ifdef DEBUG_RF
+    Serial.println("[Arduino] : Got data request from master.");
+#endif
+    //if we've been requested to give data...
+
+    packet data_out;
+    data_out.sensor_id = sensor_id;
+
+    RF24NetworkHeader header_out(master_node); // (Adress where the data is sent)
+
+    if (request_packet.packet_number == 1)
+    {
+      //gather data
+      gather_data(payload1, payload2);
+
+      data_out.packet_number = 1;
+      payload1.toCharArray(data_out.data, 30);
+
+      Serial.print("[Arduino] : Sending ");
+      print_packet(data_out);
+
+      /* bool ok = */ network.write(header_out, &data_out, 32); // Sending the data to master_node
+    }
+    else if (request_packet.packet_number == 2 /* && payload2 != "" */)
+    {
+      data_out.packet_number = 2;
+      payload2.toCharArray(data_out.data, 30);
+
+      Serial.print("[Arduino] : Sending ");
+      print_packet(data_out);
+
+      /* bool ok = */ network.write(header_out, &data_out, 32); // Sending the data to master_node
+    }
+  }
+
+/*
+  if(request_packet.packet_number == 2)
+  {
+    Serial.print("[Arduino] : Sleeping");
+    for(int i = 0; i < 10; ++i)
+    {
+      Serial.print(".");
+      delay(100);
+    }
+    Serial.println();
+  }
+*/
+
+}
+
+/////////////////////-FUNCTIONS-///////////////////////////
+
+void print_packet(packet &my_packet)
+{
+  Serial.print(my_packet.sensor_id);
+  Serial.print(", ");
+  Serial.print(my_packet.packet_number);
+  Serial.print(", ");
+  Serial.println(my_packet.data);
+}
+
+void gather_data(String & payload1, String & payload2)
+{
   Serial.print("[Arduino] : Sensor ID: "); Serial.print(sensor_id); Serial.print(" ");
   moisture_raw = get_moisture();
   Serial.print("Moisture: ");
@@ -159,51 +253,6 @@ void loop() {
   String(light_data.visible) + String(';') + \
   String(light_data.ir) + String(';') + \
   String(light_data.full) + String(';');
-
-  send_to_master(payload1);
-  //send_to_master(payload2);
-
-  delay(2000);
-}
-
-/////////////////////-FUNCTIONS-///////////////////////////
-
-void send_to_master(String & payload)
-{
-  // uint8_t plen = payload.length();
-  // uint8_t data[RH_NRF24_MAX_MESSAGE_LEN]; 
-  // uint8_t dlen = sizeof(data);
-
-  // memcpy(data, payload.c_str(), plen);
-  // data[plen + 1] = '\0';
-
-  //payload.toCharArray(data, dlen);
-
-  nrf24.send(uint8_t(payload.c_str()), sizeof(uint8_t(payload.c_str())));
-  //Serial.print("[ARDUINO] : '"); Serial.print(data); Serial.println("' -> [MASTER SENSOR]");
-  
-  nrf24.waitPacketSent();
-  // Now wait for a reply
-  uint8_t buf[RH_NRF24_MAX_MESSAGE_LEN];
-  uint8_t len = sizeof(buf);
-
-  if (nrf24.waitAvailableTimeout(2000))
-  { 
-    // Should be a reply message for us now   
-    if (nrf24.recv(buf, &len))
-    {
-      Serial.print("[MASTER SENSOR] : "); Serial.println((char*)buf);
-      Serial.println("\n[Arduino] : Sent all data to Master Sensor!");
-    }
-    else
-    {
-      Serial.println("recv failed");
-    }
-  }
-  else
-  {
-    Serial.println("[ARDUINO] : NO REPLY FROM MASTER");
-  }
 }
 
 float get_moisture()
