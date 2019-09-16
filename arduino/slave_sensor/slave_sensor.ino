@@ -9,14 +9,14 @@
 #include <SPI.h> // nrf2401+
 
 // Pins
-// #define MOISTURE_PIN 0 // Moisture sensor data connected to analog pin 0
-// #define DHTPIN 2
-// #define SOIL_TEMP_PIN 3 // Soil temp data pin
+#define MOISTURE_PIN 0 // Moisture sensor data connected to analog pin 0
+#define DHTPIN 2
+#define SOIL_TEMP_PIN 3 // Soil temp data pin
 
 // Uno
-#define MOISTURE_PIN 0 // Moisture sensor data connected to analog pin 0
-#define DHTPIN A0
-#define SOIL_TEMP_PIN A1 // Soil temp data pin
+// #define MOISTURE_PIN 0 // Moisture sensor data connected to analog pin 0
+// #define DHTPIN A0
+// #define SOIL_TEMP_PIN A1 // Soil temp data pin
 
 
 // nrf2401+

@@ -14,11 +14,14 @@ RF24 radio(7, 8);
 
 // nrf2401+
 RF24Network network(radio);
-#define NUM_NODES 4 // including master sensor node
-#define MAX_TRIES 4 // max number of tries to request data from sensor before going to the next one
+#define NUM_NODES 2 // including master sensor node
+//#define NUM_NODES 4 // including master sensor node
+//#define MAX_TRIES 4 // max number of tries to request data from sensor before going to the next one
+#define MAX_TRIES 10 // max number of tries to request data from sensor before going to the next one
+#define MAX_AVAIL_TRIES 30000
 #define MAX_AVAIL_TRIES 20000
-const uint16_t node_array[NUM_NODES] = {00, 01, 02, 03};
-//const uint16_t node_array[NUM_NODES] = {00, 01};
+//const uint16_t node_array[NUM_NODES] = {00, 01, 02, 03};
+const uint16_t node_array[NUM_NODES] = {00, 01};
 struct packet
 {
   uint8_t sensor_id;
